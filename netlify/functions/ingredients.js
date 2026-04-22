@@ -28,16 +28,9 @@ for (let i = 1; i < rows.length; i++) {
   const r = rows[i];
   if (!r[1]) continue;
 
-  // Deduplicate by ingredient name only — one row per unique ingredient
-  const key = r[1].toLowerCase().trim();
-  if (seen.has(key)) {
-    // If ingredient already exists, just add the recipe to its list
-    const existing = data.find(d => d.ingredient.toLowerCase().trim() === key);
-    if (existing && r[0] && !existing.recipes.includes(r[0])) {
-      existing.recipes.push(r[0]);
-    }
-    continue;
-  }
+  // Deduplicate by ingredient + week (removes exact duplicates only)
+  const key = `${r[1].toLowerCase().trim()}|${r[7]}`;
+  if (seen.has(key)) continue;
   seen.add(key);
 
   const originRaw = r[5] ? r[5].trim() : '';
