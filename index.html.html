@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ingredient Hub — Marley Spoon</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow:      #F5E441;
+  --yellow-dark: #D4C300;
+  --page-bg:     #FAFAF7;
+  --white:       #FFFFFF;
+  --surface-2:   #F7F6F1;
+  --hero-bg:     #3E3C30;
+  --border:      #E8E4D8;
+  --border-mid:  #D8D3C4;
+  --text:        #2C2A22;
+  --text-mid:    #5A5748;
+  --text-muted:  #8A8578;
+  --th-bg:       #F0EBE0;
+  --th-text:     #7A7060;
+  --tag-bg:      #F3EFE4;
+  --tag-text:    #6B5E3A;
+  --pill-bg:     #EDEAE2;
+  --pill-text:   #5A5748;
+  --row-hover:   #FDFCF8;
+  --sub-bg:      #F8F7F2;
+}
+
+body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--text); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+
+/* ── ANNOUNCE ── */
+.announce { background: var(--yellow); text-align: center; padding: 8px 1rem; font-size: 12.5px; font-weight: 500; color: var(--text); }
+
+/* ── NAV ── */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--text); text-decoration: none; letter-spacing: -0.02em; white-space: nowrap; }
+.nav-links { display: flex; gap: 24px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--text); font-weight: 500; border-bottom: 2px solid var(--yellow-dark); padding-bottom: 2px; }
+
+/* ── HERO ── */
+.hero { background: var(--hero-bg); padding: 2.2rem 2rem 2rem; position: relative; overflow: hidden; }
+.hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); }
+.hero-tag { display: inline-block; background: var(--yellow); color: var(--text); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 0.8rem; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.52); font-weight: 300; max-width: 480px; line-height: 1.65; margin-bottom: 1.6rem; }
+
+/* ── CONTROLS ── */
+.controls { display: flex; flex-direction: column; gap: 9px; }
+.search-wrap { position: relative; width: 100%; }
+.search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; fill: none; stroke: rgba(255,255,255,0.32); stroke-width: 2; stroke-linecap: round; pointer-events: none; }
+.search-input { width: 100%; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 11px 13px 11px 38px; font-size: 14px; color: #fff; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s, background 0.15s; }
+.search-input::placeholder { color: rgba(255,255,255,0.32); }
+.search-input:focus { background: rgba(255,255,255,0.13); border-color: rgba(245,228,65,0.5); }
+
+.filters-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.ctrl-select { flex: 1; min-width: 130px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 26px 9px 11px; font-size: 12.5px; color: rgba(255,255,255,0.85); font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.45)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; transition: border-color 0.15s; }
+.ctrl-select:hover, .ctrl-select:focus { border-color: rgba(245,228,65,0.45); }
+.ctrl-select option { background: #3E3C30; color: #fff; }
+.btn-clear { background: transparent; border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.6); padding: 9px 14px; border-radius: 8px; font-size: 12.5px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+.btn-clear:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+/* ── TOOLBAR ── */
+.toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem 0.6rem; flex-wrap: wrap; gap: 8px; }
+.result-count { font-size: 12.5px; color: var(--text-muted); }
+.result-count strong { color: var(--text-mid); font-weight: 500; }
+
+/* loading / error states */
+.state-msg { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-muted); }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--text-mid); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TABLE WRAPPER — horizontal scroll on small screens ── */
+.table-wrap { margin: 0 2rem 3rem; background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px; }
+
+thead th { padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 700; color: var(--th-text); text-transform: uppercase; letter-spacing: 0.09em; background: var(--th-bg); border-bottom: 1px solid var(--border-mid); white-space: normal; word-break: break-word; cursor: pointer; user-select: none; vertical-align: top; line-height: 1.45; }
+thead th:hover { color: var(--text-mid); }
+thead th.sorted { color: var(--text); }
+.sort-icon { display: inline-block; margin-left: 3px; opacity: 0.3; font-size: 9px; }
+thead th.sorted .sort-icon { opacity: 1; color: var(--yellow-dark); }
+
+.col-ingred   { width: 16%; }
+.col-list     { width: 22%; }
+.col-origin   { width: 9%; text-align: center !important; }
+.col-contains { width: 18%; }
+.col-maycon   { width: 18%; }
+.col-recipes  { width: 8%; text-align: center !important; }
+.col-week     { width: 9%; }
+
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--row-hover); }
+tbody tr.sub-row { background: var(--sub-bg); }
+tbody tr.sub-row:hover { background: #F2F0E8; }
+tbody tr.sub-row td { padding: 7px 14px 7px 24px; border-bottom: 1px dashed #E0DDD2; font-size: 12px; color: var(--text-mid); }
+tbody tr.sub-row:last-child td { border-bottom: 1px solid var(--border); }
+
+td { padding: 11px 14px; vertical-align: middle; line-height: 1.45; }
+.td-ingred { font-weight: 500; font-size: 13.5px; color: var(--text); }
+.td-list   { font-size: 12px; color: var(--text-muted); }
+.td-week   { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+.ob { display: inline-block; padding: 3px 7px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--pill-bg); color: var(--pill-text); white-space: nowrap; }
+.tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); font-size: 10.5px; font-weight: 500; padding: 2px 6px; border-radius: 6px; margin: 2px 2px 2px 0; }
+.dash { color: #C8C4B8; font-size: 13px; }
+
+.recipes-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--surface-2); border: 1px solid var(--border-mid); border-radius: 20px; padding: 4px 9px 4px 11px; font-size: 11.5px; font-weight: 500; color: var(--text-mid); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; white-space: nowrap; }
+.recipes-btn:hover, .recipes-btn.open { background: var(--yellow); border-color: var(--yellow-dark); color: var(--text); }
+.recipes-btn .chev { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; transition: transform 0.2s; }
+.recipes-btn.open .chev { transform: rotate(180deg); }
+
+.sub-arrow { color: #C0BAA8; margin-right: 6px; }
+.sub-label { font-size: 12px; color: var(--text-mid); }
+
+.empty { text-align: center; padding: 3rem 1rem; }
+.empty-icon { font-size: 1.9rem; display: block; margin-bottom: 0.6rem; }
+.empty h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 0.35rem; }
+.empty p { font-size: 13px; color: var(--text-muted); }
+
+footer { background: var(--hero-bg); color: rgba(255,255,255,0.38); text-align: center; font-size: 12px; padding: 1.3rem; }
+footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
+
+/* ── MOBILE / APP RESPONSIVE ── */
+@media (max-width: 600px) {
+  .announce { font-size: 11.5px; padding: 7px 0.75rem; }
+  nav { padding: 0 1rem; height: 50px; }
+  .nav-links { display: none; } /* hamburger could go here */
+  .hero { padding: 1.6rem 1rem 1.6rem; }
+  .hero h1 { font-size: 1.5rem; }
+  .hero-sub { font-size: 12.5px; margin-bottom: 1.3rem; }
+  .ctrl-select { min-width: 120px; font-size: 12px; }
+  .toolbar { padding: 0.7rem 1rem 0.5rem; }
+  .table-wrap { margin: 0 1rem 2rem; border-radius: 8px; }
+  td, thead th { padding: 9px 10px; }
+  .col-list, .col-maycon { display: none; }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  nav { padding: 0 1.25rem; }
+  .hero { padding: 2rem 1.25rem; }
+  .table-wrap { margin: 0 1.25rem 2.5rem; }
+  .col-maycon { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="announce">New to Marley Spoon? Order now and get up to $230 off your first boxes.</div>
+
+<nav>
+  <a class="nav-logo" href="#">Marley Spoon</a>
+  <div class="nav-links">
+    <a href="#">View menu</a>
+    <a href="#">How it works</a>
+    <a href="#" class="active">Ingredient Hub</a>
+    <a href="#">Support</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Transparency &amp; Provenance</div>
+  <h1>Ingredient Hub</h1>
+  <p class="hero-sub">Search every ingredient across our recipes. See where your food comes from, Australian origin %, and allergen information.</p>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="search-input" type="text" id="searchInput" placeholder="Search ingredient, allergen…" oninput="applyFilters()">
+    </div>
+    <div class="filters-row">
+      <select class="ctrl-select" id="weekFilter" onchange="applyFilters()"><option value="">All weeks</option></select>
+      <select class="ctrl-select" id="recipeFilter" onchange="applyFilters()"><option value="">All recipes</option></select>
+      <select class="ctrl-select" id="originFilter" onchange="applyFilters()">
+        <option value="">All origins</option>
+        <option value="100">100% Australian</option>
+        <option value="high">50–99% Australian</option>
+        <option value="low">1–49% Australian</option>
+        <option value="0">Imported (0%)</option>
+        <option value="na">Not specified</option>
+      </select>
+      <select class="ctrl-select" id="allergenFilter" onchange="applyFilters()">
+        <option value="">Any allergen</option>
+        <option value="Gluten">Gluten</option>
+        <option value="Milk">Dairy / Milk</option>
+        <option value="Egg">Eggs</option>
+        <option value="Fish">Fish</option>
+        <option value="Soy">Soy</option>
+        <option value="Sesame">Sesame</option>
+        <option value="Peanut">Peanut</option>
+        <option value="Tree Nut">Tree Nuts</option>
+        <option value="none">No allergens</option>
+      </select>
+      <button class="btn-clear" onclick="clearAll()">✕ Clear</button>
+    </div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div id="resultCount" class="result-count">Loading…</div>
+</div>
+
+<div class="table-wrap">
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-ingred sorted" onclick="sortBy('ingredient')">Ingredient <span class="sort-icon" id="si-ingredient">↑</span></th>
+          <th class="col-list" onclick="sortBy('ingredientList')">Ingredient list <span class="sort-icon" id="si-ingredientList">↕</span></th>
+          <th class="col-origin" onclick="sortBy('origin')" style="text-align:center">Australian origin % <span class="sort-icon" id="si-origin">↕</span></th>
+          <th class="col-contains">Product contains</th>
+          <th class="col-maycon">Product may contain</th>
+          <th class="col-recipes" style="text-align:center">Recipes</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div id="emptyState" class="empty" style="display:none">
+    <span class="empty-icon">🥗</span>
+    <h3>No ingredients found</h3>
+    <p>Try a different search or clear the filters.</p>
+  </div>
+</div>
+
+<footer>&copy; 2026 <strong>Marley Spoon</strong> Australia &mdash; Data updated from live source. For allergen queries contact our customer team.</footer>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+// Once your engineer deploys the backend, paste the API endpoint URL here.
+// Netlify:  'https://your-site.netlify.app/.netlify/functions/ingredients'
+// Express:  'https://your-server.com/api/ingredients'
+// Leave empty to use the embedded fallback data below.
+const API_URL = '';
+
+// ── FALLBACK DATA (embedded) ──────────────────────────────────────────────────
+// Used when API_URL is empty or the API is unreachable.
+// Refresh by asking Claude to re-export from the Google Sheet.
+const SHEET_DATA = [{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Chicken Thigh","ingredientList":"Chicken Thigh","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Smoked Paprika","ingredientList":"Paprika, Salt","contains":[],"mayContain":["Celery","Mustard"],"origin":0,"brand":"ms","week":"07/04/2026"},{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Red Capsicum","ingredientList":"Red Capsicum","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Jasmine Rice","ingredientList":"Jasmine Rice","contains":[],"mayContain":[],"origin":0,"brand":"ms","week":"07/04/2026"},{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Garlic Cloves","ingredientList":"Garlic","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Flat-Leaf Parsley","ingredientList":"Parsley","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Smoky Paprika Chicken with Roasted Capsicum & Herbed Rice","ingredient":"Chicken Stock Sachet","ingredientList":"Salt, Yeast Extract, Chicken Fat, Turmeric","contains":["Gluten","Soy"],"mayContain":["Milk","Egg"],"origin":null,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Beef Mince","ingredientList":"Beef Mince","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Flour Tortillas","ingredientList":"Wheat Flour, Water, Vegetable Oil, Salt, Baking Powder","contains":["Gluten","Wheat"],"mayContain":["Soy","Milk","Sesame"],"origin":null,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Black Beans Canned","ingredientList":"Black Beans, Water, Salt","contains":[],"mayContain":[],"origin":null,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Avocado","ingredientList":"Avocado","contains":[],"mayContain":[],"origin":91,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Sour Cream","ingredientList":"Cream (Milk), Skim Milk Powder, Thickener (1422)","contains":["Milk"],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Lime","ingredientList":"Lime","contains":[],"mayContain":[],"origin":85,"brand":"ms","week":"07/04/2026"},{"recipe":"Beef & Black Bean Tacos with Avocado Crema","ingredient":"Taco Spice Mix","ingredientList":"Cumin, Chilli, Garlic Powder, Oregano, Salt, Paprika","contains":[],"mayContain":["Celery","Mustard","Gluten"],"origin":0,"brand":"ms","week":"07/04/2026"},{"recipe":"Creamy Tuscan Gnocchi with Spinach & Sun-Dried Tomatoes","ingredient":"Potato Gnocchi","ingredientList":"Potato (52%), Wheat Flour, Water, Salt","contains":["Gluten","Wheat"],"mayContain":["Egg","Milk"],"origin":null,"brand":"ms","week":"07/04/2026"},{"recipe":"Creamy Tuscan Gnocchi with Spinach & Sun-Dried Tomatoes","ingredient":"Baby Spinach","ingredientList":"Baby Spinach Leaves","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Creamy Tuscan Gnocchi with Spinach & Sun-Dried Tomatoes","ingredient":"Sun-Dried Tomatoes","ingredientList":"Tomatoes, Sunflower Oil, Salt, Citric Acid","contains":[],"mayContain":["Sulphites"],"origin":0,"brand":"ms","week":"07/04/2026"},{"recipe":"Creamy Tuscan Gnocchi with Spinach & Sun-Dried Tomatoes","ingredient":"Thickened Cream","ingredientList":"Cream (Milk), Thickener (1442)","contains":["Milk"],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Creamy Tuscan Gnocchi with Spinach & Sun-Dried Tomatoes","ingredient":"Parmesan Shredded","ingredientList":"Parmesan (Milk), Salt, Cultures, Enzyme, Lysozyme (Egg)","contains":["Milk","Egg"],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Creamy Tuscan Gnocchi with Spinach & Sun-Dried Tomatoes","ingredient":"Garlic Cloves","ingredientList":"Garlic","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"07/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Salmon Fillet","ingredientList":"Atlantic Salmon","contains":["Fish"],"mayContain":["Fish"],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Teriyaki Sauce","ingredientList":"Soy Sauce (Water, Soybean, Wheat, Salt), Mirin, Sugar, Ginger","contains":["Gluten","Soy","Wheat"],"mayContain":[],"origin":0,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Edamame Frozen","ingredientList":"Edamame","contains":["Soy"],"mayContain":[],"origin":0,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Cucumber Lebanese","ingredientList":"Lebanese Cucumber","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Sushi Rice","ingredientList":"Sushi Rice","contains":[],"mayContain":[],"origin":0,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Rice Wine Vinegar","ingredientList":"Rice Vinegar, Water, Sugar, Salt","contains":[],"mayContain":["Gluten"],"origin":0,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Sesame Seeds","ingredientList":"Sesame Seeds","contains":["Sesame"],"mayContain":["Tree Nuts","Peanut"],"origin":0,"brand":"ms","week":"14/04/2026"},{"recipe":"Teriyaki Salmon Bowl with Edamame & Pickled Cucumber","ingredient":"Spring Onion","ingredientList":"Spring Onion","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Lamb Mince","ingredientList":"Lamb Mince","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Butternut Pumpkin","ingredientList":"Butternut Pumpkin","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Greek Yoghurt","ingredientList":"Whole Milk Yoghurt, Skim Milk Powder, Live Cultures","contains":["Milk"],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Cucumber Lebanese","ingredientList":"Lebanese Cucumber","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Kofta Spice Blend","ingredientList":"Cumin, Coriander, Cinnamon, Allspice, Chilli, Garlic Powder, Salt","contains":[],"mayContain":["Gluten","Celery","Mustard"],"origin":null,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Dill Fresh","ingredientList":"Dill","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Lamb Kofta with Roasted Pumpkin & Tzatziki","ingredient":"Pita Bread","ingredientList":"Wheat Flour, Water, Yeast, Salt, Vegetable Oil","contains":["Gluten","Wheat"],"mayContain":["Sesame","Soy"],"origin":null,"brand":"ms","week":"14/04/2026"},{"recipe":"Mushroom & Haloumi Fritters with Rocket & Lemon Dressing","ingredient":"Haloumi","ingredientList":"Pasteurised Cow & Sheep Milk, Salt, Mint","contains":["Milk"],"mayContain":[],"origin":null,"brand":"ms","week":"14/04/2026"},{"recipe":"Mushroom & Haloumi Fritters with Rocket & Lemon Dressing","ingredient":"Mushrooms Button","ingredientList":"Button Mushrooms","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Mushroom & Haloumi Fritters with Rocket & Lemon Dressing","ingredient":"Rocket Leaves","ingredientList":"Rocket (Arugula)","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Mushroom & Haloumi Fritters with Rocket & Lemon Dressing","ingredient":"Lemon","ingredientList":"Lemon","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Mushroom & Haloumi Fritters with Rocket & Lemon Dressing","ingredient":"Plain Flour","ingredientList":"Wheat Flour, Thiamine, Folic Acid","contains":["Gluten","Wheat"],"mayContain":["Soy","Lupin"],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Mushroom & Haloumi Fritters with Rocket & Lemon Dressing","ingredient":"Eggs","ingredientList":"Free Range Eggs","contains":["Egg"],"mayContain":[],"origin":100,"brand":"ms","week":"14/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Firm Tofu","ingredientList":"Water, Soy Bean, Coagulant (509)","contains":["Soy"],"mayContain":["Gluten","Sesame"],"origin":null,"brand":"ms","week":"21/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Broccolini","ingredientList":"Broccolini","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"21/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Green Curry Paste","ingredientList":"Lemongrass, Galangal, Green Chilli, Garlic, Shallots, Kaffir Lime, Coriander Root, Cumin, Shrimp Paste (Fish)","contains":["Fish"],"mayContain":[],"origin":0,"brand":"ms","week":"21/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Coconut Milk","ingredientList":"Coconut Extract (55%), Water","contains":[],"mayContain":["Tree Nuts"],"origin":0,"brand":"ms","week":"21/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Jasmine Rice","ingredientList":"Jasmine Rice","contains":[],"mayContain":[],"origin":0,"brand":"ms","week":"21/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Kaffir Lime Leaves","ingredientList":"Kaffir Lime Leaves","contains":[],"mayContain":[],"origin":null,"brand":"ms","week":"21/04/2026"},{"recipe":"Thai Green Curry with Tofu & Broccolini","ingredient":"Fish Sauce","ingredientList":"Fish Extract (Anchovy), Water, Salt, Sugar","contains":["Fish"],"mayContain":[],"origin":0,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Pork Belly Sliced","ingredientList":"Pork Belly","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Baguette Roll","ingredientList":"Wheat Flour, Water, Salt, Yeast, Improver (Ascorbic Acid)","contains":["Gluten","Wheat"],"mayContain":["Sesame","Soy","Egg"],"origin":null,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Carrots","ingredientList":"Carrot","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Daikon Radish","ingredientList":"Daikon Radish","contains":[],"mayContain":[],"origin":null,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Sriracha Mayo","ingredientList":"Canola Oil, Whole Egg, White Vinegar, Sriracha (Chilli, Garlic, Vinegar, Sugar, Salt), Salt","contains":["Egg","Soy"],"mayContain":["Gluten","Mustard"],"origin":null,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Coriander Fresh","ingredientList":"Coriander","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"21/04/2026"},{"recipe":"Pork Belly Banh Mi with Pickled Vegetables & Sriracha Mayo","ingredient":"Soy Sauce","ingredientList":"Water, Soybean, Wheat, Salt","contains":["Gluten","Soy"],"mayContain":[],"origin":0,"brand":"ms","week":"21/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Barramundi Fillet","ingredientList":"Barramundi","contains":["Fish"],"mayContain":["Fish"],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Asparagus","ingredientList":"Asparagus","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Baby Potatoes","ingredientList":"Baby Potatoes","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Butter Unsalted","ingredientList":"Cream (Milk)","contains":["Milk"],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Lemon","ingredientList":"Lemon","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Capers","ingredientList":"Capers, Water, Vinegar, Salt","contains":[],"mayContain":["Sulphites"],"origin":0,"brand":"ms","week":"28/04/2026"},{"recipe":"Lemon Herb Barramundi with Asparagus & Crushed Potatoes","ingredient":"Dill Fresh","ingredientList":"Dill","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Beef Mince","ingredientList":"Beef Mince","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Flour Tortillas","ingredientList":"Wheat Flour, Water, Vegetable Oil, Salt, Baking Powder","contains":["Gluten","Wheat"],"mayContain":["Soy","Milk","Sesame"],"origin":null,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Black Beans Canned","ingredientList":"Black Beans, Water, Salt","contains":[],"mayContain":[],"origin":null,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Cheddar Cheese Shredded","ingredientList":"Cheese (Milk), Salt, Non-Animal Rennet, Cultures","contains":["Milk"],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Enchilada Sauce","ingredientList":"Tomato Pur\u00e9e, Water, Chilli, Cumin, Garlic, Onion, Salt, Vinegar","contains":[],"mayContain":["Celery","Mustard"],"origin":null,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Jalape\u00f1os Sliced","ingredientList":"Jalape\u00f1os, Water, Vinegar, Salt","contains":[],"mayContain":["Sulphites"],"origin":0,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Sour Cream","ingredientList":"Cream (Milk), Skim Milk Powder, Thickener (1422)","contains":["Milk"],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"},{"recipe":"Cheesy Beef Enchiladas with Black Bean Salsa & Jalape\u00f1os","ingredient":"Coriander Fresh","ingredientList":"Coriander","contains":[],"mayContain":[],"origin":100,"brand":"ms","week":"28/04/2026"}];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let RAW      = [];
+let filtered = [];
+let sortKey  = 'ingredient';
+let sortDir  = 1;
+const expanded = new Set();
+
+// ── LOAD DATA ─────────────────────────────────────────────────────────────────
+async function loadData() {
+  if (API_URL) {
+    try {
+      document.getElementById('resultCount').innerHTML = 'Loading…';
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      RAW = await res.json();
+    } catch (err) {
+      console.warn('API fetch failed, falling back to embedded data:', err.message);
+      RAW = SHEET_DATA; // fallback to embedded data if API is down
+    }
+  } else {
+    RAW = SHEET_DATA;
+  }
+  populateFilters();
+  applyFilters();
+}
+
+// ── POPULATE FILTER DROPDOWNS ─────────────────────────────────────────────────
+function populateFilters() {
+  // Weeks — sorted by date
+  const weeks = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a, b) => {
+    return parseDate(a) - parseDate(b);
+  });
+  const wSel = document.getElementById('weekFilter');
+  wSel.innerHTML = '<option value="">All weeks</option>';
+  weeks.forEach(w => {
+    const o = document.createElement('option');
+    o.value = w; o.textContent = 'Week of ' + w;
+    wSel.appendChild(o);
+  });
+
+  // Recipes — sorted A-Z
+  const recipes = [...new Set(RAW.map(r => r.recipe).filter(Boolean))].sort();
+  const rSel = document.getElementById('recipeFilter');
+  rSel.innerHTML = '<option value="">All recipes</option>';
+  recipes.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r;
+    o.textContent = r.length > 55 ? r.slice(0, 55) + '…' : r;
+    rSel.appendChild(o);
+  });
+}
+
+function parseDate(str) {
+  if (!str) return 0;
+  const [d, m, y] = str.split('/').map(Number);
+  return new Date(y, m - 1, d).getTime();
+}
+
+// ── CONSOLIDATE: group by ingredient name across recipes ──────────────────────
+function consolidate(rows) {
+  const map = new Map();
+  rows.forEach(r => {
+    const key = r.ingredient.toLowerCase().trim();
+    if (!key) return;
+    if (!map.has(key)) {
+      map.set(key, {
+        ingredient:     r.ingredient,
+        ingredientList: r.ingredientList,
+        origin:         r.origin,
+        contains:       [...r.contains],
+        mayContain:     [...r.mayContain],
+        recipes:        [r.recipe],
+        week:           r.week,
+      });
+    } else {
+      const e = map.get(key);
+      if (!e.recipes.includes(r.recipe)) e.recipes.push(r.recipe);
+    }
+  });
+  return [...map.values()];
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+function applyFilters() {
+  const q       = document.getElementById('searchInput').value.toLowerCase().trim();
+  const week    = document.getElementById('weekFilter').value;
+  const recipe  = document.getElementById('recipeFilter').value;
+  const origF   = document.getElementById('originFilter').value;
+  const allergF = document.getElementById('allergenFilter').value;
+
+  let rows = RAW;
+  if (week)   rows = rows.filter(r => r.week === week);
+  if (recipe) rows = rows.filter(r => r.recipe === recipe);
+
+  let data = consolidate(rows);
+
+  data = data.filter(row => {
+    const mQ = !q ||
+      row.ingredient.toLowerCase().includes(q) ||
+      row.ingredientList.toLowerCase().includes(q) ||
+      row.contains.some(c => c.toLowerCase().includes(q)) ||
+      row.mayContain.some(c => c.toLowerCase().includes(q)) ||
+      row.recipes.some(r => r.toLowerCase().includes(q));
+
+    let mO = true;
+    if      (origF === '100')  mO = row.origin === 100;
+    else if (origF === 'high') mO = row.origin != null && row.origin >= 50 && row.origin < 100;
+    else if (origF === 'low')  mO = row.origin != null && row.origin > 0 && row.origin < 50;
+    else if (origF === '0')    mO = row.origin === 0;
+    else if (origF === 'na')   mO = row.origin === null;
+
+    let mA = true;
+    if (allergF === 'none') {
+      mA = row.contains.length === 0 && row.mayContain.length === 0;
+    } else if (allergF) {
+      mA = row.contains.some(c => c.toLowerCase().includes(allergF.toLowerCase())) ||
+           row.mayContain.some(c => c.toLowerCase().includes(allergF.toLowerCase()));
+    }
+
+    return mQ && mO && mA;
+  });
+
+  data.sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (sortKey === 'origin') {
+      av = av === null ? -1 : av;
+      bv = bv === null ? -1 : bv;
+      return (av - bv) * sortDir;
+    }
+    if (sortKey === 'week') {
+      return (parseDate(av) - parseDate(bv)) * sortDir;
+    }
+    av = (av || '').toLowerCase();
+    bv = (bv || '').toLowerCase();
+    return av < bv ? -sortDir : av > bv ? sortDir : 0;
+  });
+
+  filtered = data;
+  render();
+}
+
+function clearAll() {
+  ['searchInput','weekFilter','recipeFilter','originFilter','allergenFilter']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  applyFilters();
+}
+
+// ── SORT ──────────────────────────────────────────────────────────────────────
+function sortBy(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = 1; }
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+  document.querySelectorAll('.sort-icon').forEach(el => el.textContent = '↕');
+  const icon = document.getElementById('si-' + key);
+  if (icon) { icon.textContent = sortDir === 1 ? '↑' : '↓'; icon.closest('th').classList.add('sorted'); }
+  applyFilters();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function ob(val) {
+  if (val === null || val === undefined) return `<span class="dash">—</span>`;
+  if (val === 0) return `<span class="ob">Imported</span>`;
+  return `<span class="ob">${val}%</span>`;
+}
+function tags(arr) {
+  if (!arr || arr.length === 0) return `<span class="dash">—</span>`;
+  return arr.map(c => `<span class="tag">${esc(c)}</span>`).join('');
+}
+function esc(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render() {
+  const n = filtered.length;
+  document.getElementById('resultCount').innerHTML = `Showing <strong>${n}</strong> ingredient${n !== 1 ? 's' : ''}`;
+
+  const empty = document.getElementById('emptyState');
+  const tbody = document.getElementById('tableBody');
+
+  if (n === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  const rows = [];
+  filtered.forEach((row, idx) => {
+    const isOpen = expanded.has(idx);
+    rows.push(`
+      <tr>
+        <td class="td-ingred">${esc(row.ingredient)}</td>
+        <td class="td-list">${esc(row.ingredientList)}</td>
+        <td style="text-align:center">${ob(row.origin)}</td>
+        <td>${tags(row.contains)}</td>
+        <td>${tags(row.mayContain)}</td>
+        <td style="text-align:center">
+          <button class="recipes-btn ${isOpen ? 'open' : ''}" onclick="toggle(${idx})">
+            ${row.recipes.length} recipe${row.recipes.length !== 1 ? 's' : ''}
+            <svg class="chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </td>
+      </tr>`);
+    if (isOpen) {
+      row.recipes.forEach(r => {
+        rows.push(`<tr class="sub-row"><td colspan="6"><span class="sub-arrow">↳</span><span class="sub-label">${esc(r)}</span></td></tr>`);
+      });
+    }
+  });
+  tbody.innerHTML = rows.join('');
+}
+
+function toggle(idx) {
+  if (expanded.has(idx)) expanded.delete(idx);
+  else expanded.add(idx);
+  render();
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
