@@ -22,31 +22,39 @@ exports.handler = async () => {
     }
 
     const data = [];
-    const seen = new Set();
+const seen = new Set();
 
-    for (let i = 1; i < rows.length; i++) {
-      const r = rows[i];
-      if (!r[1]) continue;
+for (let i = 1; i < rows.length; i++) {
+  const r = rows[i];
+  if (!r[1]) continue;
 
-      const key = `${r[0]}|${r[1]}|${r[7]}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-
-      const originRaw = r[5] ? r[5].trim() : '';
-      const origin = originRaw === '' ? null : parseFloat(originRaw);
-
-      data.push({
-        recipe:         r[0] || '',
-        ingredient:     r[1] || '',
-        ingredientList: r[2] || '',
-        contains:       r[3] ? r[3].split(',').map(s => s.trim()).filter(Boolean) : [],
-        mayContain:     r[4] ? r[4].split(',').map(s => s.trim()).filter(Boolean) : [],
-        origin:         isNaN(origin) ? null : origin,
-        brand:          r[6] || '',
-        week:           r[7] || '',
-      });
+  // Deduplicate by ingredient name only — one row per unique ingredient
+  const key = r[1].toLowerCase().trim();
+  if (seen.has(key)) {
+    // If ingredient already exists, just add the recipe to its list
+    const existing = data.find(d => d.ingredient.toLowerCase().trim() === key);
+    if (existing && r[0] && !existing.recipes.includes(r[0])) {
+      existing.recipes.push(r[0]);
     }
+    continue;
+  }
+  seen.add(key);
 
+  const originRaw = r[5] ? r[5].trim() : '';
+  const origin = originRaw === '' ? null : parseFloat(originRaw);
+
+  data.push({
+    recipe:         r[0] || '',
+    ingredient:     r[1] || '',
+    ingredientList: r[2] || '',
+    contains:       r[3] ? r[3].split(',').map(s => s.trim()).filter(Boolean) : [],
+    mayContain:     r[4] ? r[4].split(',').map(s => s.trim()).filter(Boolean) : [],
+    origin:         isNaN(origin) ? null : origin,
+    brand:          r[6] || '',
+    week:           r[7] || '',
+    recipes:        [r[0] || ''],
+  });
+}
     return {
       statusCode: 200,
       headers: {
