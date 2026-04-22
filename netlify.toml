@@ -1,0 +1,8 @@
+#Tells Netlify where your site and backend function live. Without it Netlify ignores ingredients.js entirely
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
