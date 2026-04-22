@@ -13,7 +13,7 @@ exports.handler = async () => {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.SHEET_ID,
-      range: 'A:H',
+      range: 'ms!A:H',
     });
 
     const rows = response.data.values;
