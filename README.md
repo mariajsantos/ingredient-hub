@@ -1,5 +1,3 @@
-# ingredient-hub
-
 # Ingredient Hub — Marley Spoon
 
 A customer-facing ingredient transparency page for Marley Spoon. Customers can search every ingredient used across all recipes.
