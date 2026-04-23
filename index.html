@@ -310,13 +310,13 @@ async function loadData() {
 
 // ── POPULATE FILTER DROPDOWNS ─────────────────────────────────────────────────
 function populateFilters() {
-  const weeks = [...new Set(RAW.map(r => r.w).filter(Boolean))].sort((a, b) => parseDate(a) - parseDate(b));
+  const weeks = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a, b) => parseDate(a) - parseDate(b));
   buildPanel('week', weeks, w => fmtWeek(w));
 
-  const recipes = [...new Set(RAW.map(r => r.re).filter(Boolean))].sort();
+  const recipes = [...new Set(RAW.map(r => r.recipe).filter(Boolean))].sort();
   buildPanel('recipe', recipes, r => r);
 
-  const ingredients = [...new Set(RAW.map(r => r.i).filter(Boolean))].sort();
+  const ingredients = [...new Set(RAW.map(r => r.ingredient).filter(Boolean))].sort();
   buildPanel('ingredient', ingredients, i => i);
 
   buildPanel('allergen', ['Gluten','Dairy / Milk','Eggs','Fish','Soy','Sesame','Peanut','Tree Nuts','No allergens'], a => a);
@@ -347,22 +347,22 @@ function parseDate(str) {
 function consolidate(rows) {
   const map = new Map();
   rows.forEach(r => {
-    if (!r.i) return; // skip rows with no ingredient
-    const key = r.i.toLowerCase().trim();
+    if (!r.ingredient) return; // skip rows with no ingredient
+    const key = r.ingredient.toLowerCase().trim();
     if (!key) return;
     if (!map.has(key)) {
       map.set(key, {
-        ingredient:     r.i,
-        ingredientList: r.il || '',
-        origin:         r.o ?? null,
-        contains:       Array.isArray(r.c)  ? [...r.c]  : [],
-        mayContain:     Array.isArray(r.mc) ? [...r.mc] : [],
-        recipes:        [r.re],
-        week:           r.w || '',
+        ingredient:     r.ingredient,
+        ingredientList: r.ingredientList || '',
+        origin:         r.origin ?? null,
+        contains:       Array.isArray(r.contains)  ? [...r.contains]  : [],
+        mayContain:     Array.isArray(r.mayContain) ? [...r.mayContain] : [],
+        recipes:        [r.recipe],
+        week:           r.week || '',
       });
     } else {
       const e = map.get(key);
-      if (!e.recipes.includes(r.re)) e.recipes.push(r.re);
+      if (!e.recipes.includes(r.recipe)) e.recipes.push(r.recipe);
     }
   });
   return [...map.values()];
@@ -388,9 +388,9 @@ function applyFilters() {
   const selAllergens = activeFilters.allergen;
 
   let rows = RAW;
-  if (selWeeks.size   > 0) rows = rows.filter(r => selWeeks.has(r.w));
-  if (selRecipes.size > 0) rows = rows.filter(r => selRecipes.has(r.re));
-  if (selIngreds.size > 0) rows = rows.filter(r => selIngreds.has(r.i));
+  if (selWeeks.size   > 0) rows = rows.filter(r => selWeeks.has(r.week));
+  if (selRecipes.size > 0) rows = rows.filter(r => selRecipes.has(r.recipe));
+  if (selIngreds.size > 0) rows = rows.filter(r => selIngreds.has(r.ingredient));
 
   let data = consolidate(rows);
 
