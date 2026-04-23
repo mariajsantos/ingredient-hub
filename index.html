@@ -35,31 +35,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 /* ── ANNOUNCE ── */
 .announce { background: var(--yellow); text-align: center; padding: 8px 1rem; font-size: 12.5px; font-weight: 500; color: var(--text); }
 
-/* ── NAV ── */
-nav {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-}
-.nav-logo { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--text); text-decoration: none; letter-spacing: -0.02em; white-space: nowrap; }
-.nav-links { display: flex; gap: 24px; align-items: center; }
-.nav-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
-.nav-links a:hover { color: var(--text); }
-.nav-links a.active { color: var(--text); font-weight: 500; border-bottom: 2px solid var(--yellow-dark); padding-bottom: 2px; }
 
 /* ── HERO ── */
-.hero { background: var(--hero-bg); padding: 2.2rem 2rem 2rem; position: relative; overflow: hidden; }
+.hero-img-wrap { overflow: hidden; line-height: 0; }
+.hero-img-wrap img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; }
+.hero { background: var(--hero-bg); padding: 1.4rem 2rem 1.8rem; position: relative; overflow: hidden; }
 .hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); }
-.hero-tag { display: inline-block; background: var(--yellow); color: var(--text); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 0.8rem; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 6px; }
-.hero-sub { font-size: 13px; color: rgba(255,255,255,0.52); font-weight: 300; max-width: 480px; line-height: 1.65; margin-bottom: 1.6rem; }
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.58); font-weight: 300; line-height: 1.55; margin-bottom: 1.1rem; }
 
 /* ── CONTROLS ── */
 .controls { display: flex; flex-direction: column; gap: 9px; }
@@ -70,9 +52,22 @@ nav {
 .search-input:focus { background: rgba(255,255,255,0.13); border-color: rgba(245,228,65,0.5); }
 
 .filters-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.ctrl-select { flex: 1; min-width: 130px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 26px 9px 11px; font-size: 12.5px; color: rgba(255,255,255,0.85); font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.45)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; transition: border-color 0.15s; }
-.ctrl-select:hover, .ctrl-select:focus { border-color: rgba(245,228,65,0.45); }
-.ctrl-select option { background: #3E3C30; color: #fff; }
+
+/* ── CUSTOM SEARCHABLE SELECT ── */
+.cs-wrap { position: relative; flex: 1; min-width: 140px; }
+.cs-trigger { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 28px 9px 11px; font-size: 12.5px; color: rgba(255,255,255,0.38); font-family: 'DM Sans', sans-serif; cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.4)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; transition: border-color 0.15s, color 0.15s; }
+.cs-trigger.has-value { color: rgba(255,255,255,0.9); }
+.cs-trigger:hover, .cs-wrap.open .cs-trigger { border-color: rgba(245,228,65,0.5); }
+.cs-panel { position: absolute; top: calc(100% + 5px); left: 0; min-width: 100%; width: max-content; max-width: 300px; background: #fff; border: 1px solid var(--border-mid); border-radius: 8px; box-shadow: 0 6px 22px rgba(0,0,0,0.13); z-index: 300; display: none; overflow: hidden; }
+.cs-wrap.open .cs-panel { display: block; }
+.cs-search { width: 100%; padding: 9px 12px; border: none; border-bottom: 1px solid var(--border); font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; }
+.cs-search::placeholder { color: var(--text-muted); }
+.cs-list { max-height: 210px; overflow-y: auto; }
+.cs-option { padding: 8px 13px; font-size: 13px; color: var(--text); cursor: pointer; transition: background 0.08s; }
+.cs-option:hover { background: var(--row-hover); }
+.cs-option.selected { background: var(--th-bg); font-weight: 500; }
+.cs-option.is-placeholder { color: var(--text-muted); }
+
 .btn-clear { background: transparent; border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.6); padding: 9px 14px; border-radius: 8px; font-size: 12.5px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
 .btn-clear:hover { background: rgba(255,255,255,0.08); color: #fff; }
 
@@ -98,13 +93,11 @@ thead th.sorted { color: var(--text); }
 .sort-icon { display: inline-block; margin-left: 3px; opacity: 0.3; font-size: 9px; }
 thead th.sorted .sort-icon { opacity: 1; color: var(--yellow-dark); }
 
-.col-ingred   { width: 16%; }
-.col-list     { width: 22%; }
-.col-origin   { width: 9%; text-align: center !important; }
-.col-contains { width: 18%; }
-.col-maycon   { width: 18%; }
-.col-recipes  { width: 8%; text-align: center !important; }
-.col-week     { width: 9%; }
+.col-ingred   { width: 20%; }
+.col-list     { width: 27%; }
+.col-contains { width: 20%; }
+.col-maycon   { width: 20%; }
+.col-recipes  { width: 13%; text-align: center !important; }
 
 tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
 tbody tr:last-child { border-bottom: none; }
@@ -131,6 +124,9 @@ td { padding: 11px 14px; vertical-align: middle; line-height: 1.45; }
 .sub-arrow { color: #C0BAA8; margin-right: 6px; }
 .sub-label { font-size: 12px; color: var(--text-mid); }
 
+/* ── SEARCH WRAP ── */
+.search-wrap { position: relative; }
+
 .empty { text-align: center; padding: 3rem 1rem; }
 .empty-icon { font-size: 1.9rem; display: block; margin-bottom: 0.6rem; }
 .empty h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 0.35rem; }
@@ -142,11 +138,9 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 /* ── MOBILE / APP RESPONSIVE ── */
 @media (max-width: 600px) {
   .announce { font-size: 11.5px; padding: 7px 0.75rem; }
-  nav { padding: 0 1rem; height: 50px; }
-  .nav-links { display: none; } /* hamburger could go here */
-  .hero { padding: 1.6rem 1rem 1.6rem; }
-  .hero h1 { font-size: 1.5rem; }
-  .hero-sub { font-size: 12.5px; margin-bottom: 1.3rem; }
+  .hero-img-wrap img { max-height: 200px; }
+  .hero { padding: 1.1rem 1rem 1.4rem; }
+  .hero-sub { font-size: 12px; margin-bottom: 0.9rem; }
   .ctrl-select { min-width: 120px; font-size: 12px; }
   .toolbar { padding: 0.7rem 1rem 0.5rem; }
   .table-wrap { margin: 0 1rem 2rem; border-radius: 8px; }
@@ -164,50 +158,25 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 </head>
 <body>
 
-<div class="announce">New to Marley Spoon? Order now and get up to $230 off your first boxes.</div>
 
-<nav>
-  <a class="nav-logo" href="#">Marley Spoon</a>
-  <div class="nav-links">
-    <a href="#">View menu</a>
-    <a href="#">How it works</a>
-    <a href="#" class="active">Ingredient Hub</a>
-    <a href="#">Support</a>
-  </div>
-</nav>
+<!-- Hero image — no overlay -->
+<div class="hero-img-wrap">
+  <img src="Header-4.jpg" alt="Ingredient Hub header">
+</div>
 
+<!-- Controls strip -->
 <div class="hero">
-  <div class="hero-tag">Transparency &amp; Provenance</div>
-  <h1>Ingredient Hub</h1>
-  <p class="hero-sub">Search every ingredient across our recipes. See where your food comes from, Australian origin %, and allergen information.</p>
+  <p class="hero-sub">Search every ingredient across our recipes.</p>
   <div class="controls">
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input class="search-input" type="text" id="searchInput" placeholder="Search ingredient, allergen…" oninput="applyFilters()">
+      <input class="search-input" type="text" id="searchInput" placeholder="Search ingredient, allergen or recipe…" oninput="applyFilters()" autocomplete="off">
     </div>
     <div class="filters-row">
-      <select class="ctrl-select" id="weekFilter" onchange="applyFilters()"><option value="">All weeks</option></select>
-      <select class="ctrl-select" id="recipeFilter" onchange="applyFilters()"><option value="">All recipes</option></select>
-      <select class="ctrl-select" id="originFilter" onchange="applyFilters()">
-        <option value="">All origins</option>
-        <option value="100">100% Australian</option>
-        <option value="high">50–99% Australian</option>
-        <option value="low">1–49% Australian</option>
-        <option value="0">Imported (0%)</option>
-        <option value="na">Not specified</option>
-      </select>
-      <select class="ctrl-select" id="allergenFilter" onchange="applyFilters()">
-        <option value="">Any allergen</option>
-        <option value="Gluten">Gluten</option>
-        <option value="Milk">Dairy / Milk</option>
-        <option value="Egg">Eggs</option>
-        <option value="Fish">Fish</option>
-        <option value="Soy">Soy</option>
-        <option value="Sesame">Sesame</option>
-        <option value="Peanut">Peanut</option>
-        <option value="Tree Nut">Tree Nuts</option>
-        <option value="none">No allergens</option>
-      </select>
+      <div class="cs-wrap" id="cs-week"></div>
+      <div class="cs-wrap" id="cs-recipe"></div>
+      <div class="cs-wrap" id="cs-ingredient"></div>
+      <div class="cs-wrap" id="cs-allergen"></div>
       <button class="btn-clear" onclick="clearAll()">✕ Clear</button>
     </div>
   </div>
@@ -224,7 +193,6 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
         <tr>
           <th class="col-ingred sorted" onclick="sortBy('ingredient')">Ingredient <span class="sort-icon" id="si-ingredient">↑</span></th>
           <th class="col-list" onclick="sortBy('ingredientList')">Ingredient list <span class="sort-icon" id="si-ingredientList">↕</span></th>
-          <th class="col-origin" onclick="sortBy('origin')" style="text-align:center">Australian origin % <span class="sort-icon" id="si-origin">↕</span></th>
           <th class="col-contains">Product contains</th>
           <th class="col-maycon">Product may contain</th>
           <th class="col-recipes" style="text-align:center">Recipes</th>
@@ -282,30 +250,117 @@ async function loadData() {
   applyFilters();
 }
 
+// ── CUSTOM SEARCHABLE SELECT ──────────────────────────────────────────────────
+class CustomSelect {
+  constructor(wrap, placeholder, onChange) {
+    this.wrap        = wrap;
+    this.placeholder = placeholder;
+    this.onChange    = onChange;
+    this.value       = '';
+    this.allOptions  = [];
+
+    wrap.innerHTML = `
+      <button class="cs-trigger" type="button">${placeholder}</button>
+      <div class="cs-panel">
+        <input class="cs-search" type="text" placeholder="Type to search…" autocomplete="off">
+        <div class="cs-list"></div>
+      </div>`;
+
+    this.trigger = wrap.querySelector('.cs-trigger');
+    this.panel   = wrap.querySelector('.cs-panel');
+    this.search  = wrap.querySelector('.cs-search');
+    this.list    = wrap.querySelector('.cs-list');
+
+    this.trigger.addEventListener('click', e => { e.stopPropagation(); this.toggle(); });
+    this.search.addEventListener('input', () => this.renderList());
+    document.addEventListener('click', e => { if (!wrap.contains(e.target)) this.close(); });
+  }
+
+  setOptions(opts) {
+    this.allOptions = opts;
+    this.renderList();
+  }
+
+  renderList() {
+    const q = this.search.value.toLowerCase();
+    const filtered = this.allOptions.filter(o => !q || o.label.toLowerCase().includes(q));
+    this.list.innerHTML = '';
+    filtered.forEach(o => {
+      const el = document.createElement('div');
+      el.className = 'cs-option' +
+        (o.value === this.value ? ' selected' : '') +
+        (!o.value ? ' is-placeholder' : '');
+      el.textContent = o.label;
+      el.addEventListener('click', () => this.select(o));
+      this.list.appendChild(el);
+    });
+  }
+
+  select(opt) {
+    this.value = opt.value;
+    this.trigger.textContent = opt.value ? opt.label : this.placeholder;
+    this.trigger.classList.toggle('has-value', !!opt.value);
+    this.close();
+    this.onChange();
+  }
+
+  reset() {
+    this.select(this.allOptions[0] || { value: '', label: this.placeholder });
+  }
+
+  toggle() {
+    if (this.wrap.classList.contains('open')) { this.close(); return; }
+    document.querySelectorAll('.cs-wrap.open').forEach(w => w.classList.remove('open'));
+    this.wrap.classList.add('open');
+    this.search.value = '';
+    this.renderList();
+    setTimeout(() => this.search.focus(), 0);
+  }
+
+  close() { this.wrap.classList.remove('open'); }
+}
+
+let csWeek, csRecipe, csIngredient, csAllergen;
+
+function initSelects() {
+  csWeek       = new CustomSelect(document.getElementById('cs-week'),       'All weeks',       applyFilters);
+  csRecipe     = new CustomSelect(document.getElementById('cs-recipe'),     'All recipes',     applyFilters);
+  csIngredient = new CustomSelect(document.getElementById('cs-ingredient'), 'All ingredients', applyFilters);
+  csAllergen   = new CustomSelect(document.getElementById('cs-allergen'),   'Any allergen',    applyFilters);
+
+  csAllergen.setOptions([
+    { value: '',         label: 'Any allergen'  },
+    { value: 'Gluten',   label: 'Gluten'        },
+    { value: 'Milk',     label: 'Dairy / Milk'  },
+    { value: 'Egg',      label: 'Eggs'          },
+    { value: 'Fish',     label: 'Fish'          },
+    { value: 'Soy',      label: 'Soy'           },
+    { value: 'Sesame',   label: 'Sesame'        },
+    { value: 'Peanut',   label: 'Peanut'        },
+    { value: 'Tree Nut', label: 'Tree Nuts'     },
+    { value: 'none',     label: 'No allergens'  },
+  ]);
+}
+
 // ── POPULATE FILTER DROPDOWNS ─────────────────────────────────────────────────
 function populateFilters() {
-  // Weeks — sorted by date
-  const weeks = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a, b) => {
-    return parseDate(a) - parseDate(b);
-  });
-  const wSel = document.getElementById('weekFilter');
-  wSel.innerHTML = '<option value="">All weeks</option>';
-  weeks.forEach(w => {
-    const o = document.createElement('option');
-    o.value = w; o.textContent = 'Week of ' + w;
-    wSel.appendChild(o);
-  });
+  const weeks = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a, b) => parseDate(a) - parseDate(b));
+  csWeek.setOptions([
+    { value: '', label: 'All weeks' },
+    ...weeks.map(w => ({ value: w, label: 'Week of ' + w }))
+  ]);
 
-  // Recipes — sorted A-Z
   const recipes = [...new Set(RAW.map(r => r.recipe).filter(Boolean))].sort();
-  const rSel = document.getElementById('recipeFilter');
-  rSel.innerHTML = '<option value="">All recipes</option>';
-  recipes.forEach(r => {
-    const o = document.createElement('option');
-    o.value = r;
-    o.textContent = r.length > 55 ? r.slice(0, 55) + '…' : r;
-    rSel.appendChild(o);
-  });
+  csRecipe.setOptions([
+    { value: '', label: 'All recipes' },
+    ...recipes.map(r => ({ value: r, label: r }))
+  ]);
+
+  const ingredients = [...new Set(RAW.map(r => r.ingredient).filter(Boolean))].sort();
+  csIngredient.setOptions([
+    { value: '', label: 'All ingredients' },
+    ...ingredients.map(i => ({ value: i, label: i }))
+  ]);
 }
 
 function parseDate(str) {
@@ -340,15 +395,16 @@ function consolidate(rows) {
 
 // ── FILTERS ───────────────────────────────────────────────────────────────────
 function applyFilters() {
-  const q       = document.getElementById('searchInput').value.toLowerCase().trim();
-  const week    = document.getElementById('weekFilter').value;
-  const recipe  = document.getElementById('recipeFilter').value;
-  const origF   = document.getElementById('originFilter').value;
-  const allergF = document.getElementById('allergenFilter').value;
+  const q        = document.getElementById('searchInput').value.toLowerCase().trim();
+  const week     = csWeek       ? csWeek.value       : '';
+  const recipe   = csRecipe     ? csRecipe.value     : '';
+  const ingredF  = csIngredient ? csIngredient.value : '';
+  const allergF  = csAllergen   ? csAllergen.value   : '';
 
   let rows = RAW;
-  if (week)   rows = rows.filter(r => r.week === week);
-  if (recipe) rows = rows.filter(r => r.recipe === recipe);
+  if (week)    rows = rows.filter(r => r.week === week);
+  if (recipe)  rows = rows.filter(r => r.recipe === recipe);
+  if (ingredF) rows = rows.filter(r => r.ingredient === ingredF);
 
   let data = consolidate(rows);
 
@@ -360,13 +416,6 @@ function applyFilters() {
       row.mayContain.some(c => c.toLowerCase().includes(q)) ||
       row.recipes.some(r => r.toLowerCase().includes(q));
 
-    let mO = true;
-    if      (origF === '100')  mO = row.origin === 100;
-    else if (origF === 'high') mO = row.origin != null && row.origin >= 50 && row.origin < 100;
-    else if (origF === 'low')  mO = row.origin != null && row.origin > 0 && row.origin < 50;
-    else if (origF === '0')    mO = row.origin === 0;
-    else if (origF === 'na')   mO = row.origin === null;
-
     let mA = true;
     if (allergF === 'none') {
       mA = row.contains.length === 0 && row.mayContain.length === 0;
@@ -375,7 +424,7 @@ function applyFilters() {
            row.mayContain.some(c => c.toLowerCase().includes(allergF.toLowerCase()));
     }
 
-    return mQ && mO && mA;
+    return mQ && mA;
   });
 
   data.sort((a, b) => {
@@ -398,8 +447,8 @@ function applyFilters() {
 }
 
 function clearAll() {
-  ['searchInput','weekFilter','recipeFilter','originFilter','allergenFilter']
-    .forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('searchInput').value = '';
+  [csWeek, csRecipe, csIngredient, csAllergen].forEach(cs => cs && cs.reset());
   applyFilters();
 }
 
@@ -415,11 +464,6 @@ function sortBy(key) {
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-function ob(val) {
-  if (val === null || val === undefined) return `<span class="dash">—</span>`;
-  if (val === 0) return `<span class="ob">Imported</span>`;
-  return `<span class="ob">${val}%</span>`;
-}
 function tags(arr) {
   if (!arr || arr.length === 0) return `<span class="dash">—</span>`;
   return arr.map(c => `<span class="tag">${esc(c)}</span>`).join('');
@@ -446,7 +490,6 @@ function render() {
       <tr>
         <td class="td-ingred">${esc(row.ingredient)}</td>
         <td class="td-list">${esc(row.ingredientList)}</td>
-        <td style="text-align:center">${ob(row.origin)}</td>
         <td>${tags(row.contains)}</td>
         <td>${tags(row.mayContain)}</td>
         <td style="text-align:center">
@@ -458,7 +501,7 @@ function render() {
       </tr>`);
     if (isOpen) {
       row.recipes.forEach(r => {
-        rows.push(`<tr class="sub-row"><td colspan="6"><span class="sub-arrow">↳</span><span class="sub-label">${esc(r)}</span></td></tr>`);
+        rows.push(`<tr class="sub-row"><td colspan="5"><span class="sub-arrow">↳</span><span class="sub-label">${esc(r)}</span></td></tr>`);
       });
     }
   });
@@ -470,6 +513,7 @@ function toggle(idx) {
   else expanded.add(idx);
   render();
 }
+
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 loadData();
