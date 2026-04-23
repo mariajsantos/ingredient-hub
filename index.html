@@ -347,17 +347,18 @@ function parseDate(str) {
 function consolidate(rows) {
   const map = new Map();
   rows.forEach(r => {
+    if (!r.i) return; // skip rows with no ingredient
     const key = r.i.toLowerCase().trim();
     if (!key) return;
     if (!map.has(key)) {
       map.set(key, {
         ingredient:     r.i,
-        ingredientList: r.il,
-        origin:         r.o,
-        contains:       [...r.c],
-        mayContain:     [...r.mc],
+        ingredientList: r.il || '',
+        origin:         r.o ?? null,
+        contains:       Array.isArray(r.c)  ? [...r.c]  : [],
+        mayContain:     Array.isArray(r.mc) ? [...r.mc] : [],
         recipes:        [r.re],
-        week:           r.w,
+        week:           r.w || '',
       });
     } else {
       const e = map.get(key);
