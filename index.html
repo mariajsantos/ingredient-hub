@@ -39,37 +39,43 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 /* ── HERO ── */
 .hero-img-wrap { overflow: hidden; line-height: 0; }
 .hero-img-wrap img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; }
-.hero { background: var(--hero-bg); padding: 1.4rem 2rem 1.8rem; position: relative; overflow: hidden; }
+.hero { background: var(--hero-bg); padding: 1.4rem 2rem 1.8rem; position: relative; }
 .hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); }
 .hero-sub { font-size: 13px; color: rgba(255,255,255,0.58); font-weight: 300; line-height: 1.55; margin-bottom: 1.1rem; }
 
 /* ── CONTROLS ── */
 .controls { display: flex; flex-direction: column; gap: 9px; }
-.search-wrap { position: relative; width: 100%; }
-.search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; fill: none; stroke: rgba(255,255,255,0.32); stroke-width: 2; stroke-linecap: round; pointer-events: none; }
-.search-input { width: 100%; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 11px 13px 11px 38px; font-size: 14px; color: #fff; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s, background 0.15s; }
-.search-input::placeholder { color: rgba(255,255,255,0.32); }
-.search-input:focus { background: rgba(255,255,255,0.13); border-color: rgba(245,228,65,0.5); }
 
-.filters-row { display: flex; gap: 8px; flex-wrap: wrap; }
+/* search inside filter panels */
+.panel-search-wrap { position: relative; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.panel-search-wrap svg { position: absolute; left: 19px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; fill: none; stroke: var(--text-muted); stroke-width: 2; stroke-linecap: round; pointer-events: none; }
+.panel-search { width: 100%; padding: 6px 8px 6px 28px; font-size: 12.5px; border: 1px solid var(--border); border-radius: 6px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; background: var(--surface-2); }
+.panel-search::placeholder { color: var(--text-muted); }
+.panel-search:focus { border-color: var(--border-mid); background: var(--white); }
 
-/* ── CUSTOM SEARCHABLE SELECT ── */
-.cs-wrap { position: relative; flex: 1; min-width: 140px; }
-.cs-trigger { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 28px 9px 11px; font-size: 12.5px; color: rgba(255,255,255,0.38); font-family: 'DM Sans', sans-serif; cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.4)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; transition: border-color 0.15s, color 0.15s; }
-.cs-trigger.has-value { color: rgba(255,255,255,0.9); }
-.cs-trigger:hover, .cs-wrap.open .cs-trigger { border-color: rgba(245,228,65,0.5); }
-.cs-panel { position: absolute; top: calc(100% + 5px); left: 0; min-width: 100%; width: max-content; max-width: 300px; background: #fff; border: 1px solid var(--border-mid); border-radius: 8px; box-shadow: 0 6px 22px rgba(0,0,0,0.13); z-index: 300; display: none; overflow: hidden; }
-.cs-wrap.open .cs-panel { display: block; }
-.cs-search { width: 100%; padding: 9px 12px; border: none; border-bottom: 1px solid var(--border); font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; }
-.cs-search::placeholder { color: var(--text-muted); }
-.cs-list { max-height: 210px; overflow-y: auto; }
-.cs-option { padding: 8px 13px; font-size: 13px; color: var(--text); cursor: pointer; transition: background 0.08s; }
-.cs-option:hover { background: var(--row-hover); }
-.cs-option.selected { background: var(--th-bg); font-weight: 500; }
-.cs-option.is-placeholder { color: var(--text-muted); }
+.filters-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; }
 
-.btn-clear { background: transparent; border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.6); padding: 9px 14px; border-radius: 8px; font-size: 12.5px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
-.btn-clear:hover { background: rgba(255,255,255,0.08); color: #fff; }
+/* ── FILTER DROPDOWNS ── */
+.filter-dropdown { position: relative; flex-shrink: 0; }
+.filter-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 13px; font-size: 12.5px; color: rgba(255,255,255,0.85); font-family: 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap; transition: border-color 0.15s, background 0.15s; }
+.filter-btn:hover { border-color: rgba(245,228,65,0.45); background: rgba(255,255,255,0.12); }
+.filter-btn.has-selection { border-color: rgba(245,228,65,0.65); background: rgba(245,228,65,0.12); color: #fff; }
+.filter-btn.open { border-color: rgba(245,228,65,0.55); background: rgba(255,255,255,0.13); }
+.filter-count { background: var(--yellow); color: var(--text); border-radius: 10px; padding: 1px 6px; font-size: 10.5px; font-weight: 700; display: none; }
+.filter-btn.has-selection .filter-count { display: inline; }
+.filter-chev { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; transition: transform 0.2s; flex-shrink: 0; }
+.filter-btn.open .filter-chev { transform: rotate(180deg); }
+.filter-panel { display: none; position: absolute; top: calc(100% + 5px); left: 0; min-width: 220px; max-height: 300px; overflow-y: auto; background: var(--white); border: 1px solid var(--border-mid); border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.13); z-index: 200; }
+.filter-panel.open { display: block; }
+.filter-panel-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 7px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 1; }
+.filter-panel-head span { font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.filter-clear-btn { font-size: 11.5px; color: var(--text-muted); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 0; }
+.filter-clear-btn:hover { color: var(--text); }
+.filter-options-list { padding: 4px 0; }
+.filter-option { display: flex; align-items: center; gap: 9px; padding: 7px 13px; font-size: 13px; color: var(--text); cursor: pointer; transition: background 0.1s; user-select: none; }
+.filter-option:hover { background: var(--surface-2); }
+.filter-option input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--yellow-dark); cursor: pointer; flex-shrink: 0; margin: 0; }
+.filter-option-label { line-height: 1.3; }
 
 /* ── TOOLBAR ── */
 .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem 0.6rem; flex-wrap: wrap; gap: 8px; }
@@ -93,11 +99,18 @@ thead th.sorted { color: var(--text); }
 .sort-icon { display: inline-block; margin-left: 3px; opacity: 0.3; font-size: 9px; }
 thead th.sorted .sort-icon { opacity: 1; color: var(--yellow-dark); }
 
-.col-ingred   { width: 20%; }
-.col-list     { width: 27%; }
-.col-contains { width: 20%; }
-.col-maycon   { width: 20%; }
+.col-ingred   { width: 18%; }
+.col-list     { width: 23%; }
+.col-contains { width: 18%; }
+.col-maycon   { width: 18%; }
+.col-origin   { width: 10%; text-align: center !important; }
 .col-recipes  { width: 13%; text-align: center !important; }
+
+.origin-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.origin-high  { background: #E6F4EA; color: #2D6A3F; }
+.origin-mid   { background: #FEF9E7; color: #9A6B00; }
+.origin-low   { background: #FDF0E6; color: #9A4200; }
+.origin-zero  { background: var(--pill-bg); color: var(--text-muted); }
 
 tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
 tbody tr:last-child { border-bottom: none; }
@@ -166,18 +179,61 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 
 <!-- Controls strip -->
 <div class="hero">
-  <p class="hero-sub">Search every ingredient across our recipes.</p>
+  <p class="hero-sub">Filter ingredients by week, recipe, ingredient or allergen.</p>
   <div class="controls">
-    <div class="search-wrap">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input class="search-input" type="text" id="searchInput" placeholder="Search ingredient, allergen or recipe…" oninput="applyFilters()" autocomplete="off">
-    </div>
     <div class="filters-row">
-      <div class="cs-wrap" id="cs-week"></div>
-      <div class="cs-wrap" id="cs-recipe"></div>
-      <div class="cs-wrap" id="cs-ingredient"></div>
-      <div class="cs-wrap" id="cs-allergen"></div>
-      <button class="btn-clear" onclick="clearAll()">✕ Clear</button>
+      <div class="filter-dropdown">
+        <button class="filter-btn" id="fb-week" onclick="toggleFilterPanel('week')">
+          Week <span class="filter-count"></span>
+          <svg class="filter-chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="filter-panel" id="fp-week">
+          <div class="filter-panel-head"><span>Week</span><button class="filter-clear-btn" onclick="clearFilter('week')">Clear</button></div>
+          <div class="filter-options-list" id="fl-week"></div>
+        </div>
+      </div>
+      <div class="filter-dropdown">
+        <button class="filter-btn" id="fb-recipe" onclick="toggleFilterPanel('recipe')">
+          Recipe <span class="filter-count"></span>
+          <svg class="filter-chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="filter-panel" id="fp-recipe">
+          <div class="filter-panel-head"><span>Recipe</span><button class="filter-clear-btn" onclick="clearFilter('recipe')">Clear</button></div>
+          <div class="panel-search-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input class="panel-search" type="text" placeholder="Search recipes…" oninput="filterPanelOptions('recipe',this.value)" autocomplete="off">
+          </div>
+          <div class="filter-options-list" id="fl-recipe"></div>
+        </div>
+      </div>
+      <div class="filter-dropdown">
+        <button class="filter-btn" id="fb-ingredient" onclick="toggleFilterPanel('ingredient')">
+          Ingredient <span class="filter-count"></span>
+          <svg class="filter-chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="filter-panel" id="fp-ingredient">
+          <div class="filter-panel-head"><span>Ingredient</span><button class="filter-clear-btn" onclick="clearFilter('ingredient')">Clear</button></div>
+          <div class="panel-search-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input class="panel-search" type="text" placeholder="Search ingredients…" oninput="filterPanelOptions('ingredient',this.value)" autocomplete="off">
+          </div>
+          <div class="filter-options-list" id="fl-ingredient"></div>
+        </div>
+      </div>
+      <div class="filter-dropdown">
+        <button class="filter-btn" id="fb-allergen" onclick="toggleFilterPanel('allergen')">
+          Allergen <span class="filter-count"></span>
+          <svg class="filter-chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="filter-panel" id="fp-allergen">
+          <div class="filter-panel-head"><span>Allergen</span><button class="filter-clear-btn" onclick="clearFilter('allergen')">Clear</button></div>
+          <div class="panel-search-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input class="panel-search" type="text" placeholder="Search allergens…" oninput="filterPanelOptions('allergen',this.value)" autocomplete="off">
+          </div>
+          <div class="filter-options-list" id="fl-allergen"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -195,6 +251,7 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
           <th class="col-list" onclick="sortBy('ingredientList')">Ingredient list <span class="sort-icon" id="si-ingredientList">↕</span></th>
           <th class="col-contains">Product contains</th>
           <th class="col-maycon">Product may contain</th>
+          <th class="col-origin" onclick="sortBy('origin')" style="text-align:center">AU Origin <span class="sort-icon" id="si-origin">↕</span></th>
           <th class="col-recipes" style="text-align:center">Recipes</th>
         </tr>
       </thead>
@@ -229,7 +286,8 @@ let RAW      = [];
 let filtered = [];
 let sortKey  = 'ingredient';
 let sortDir  = 1;
-const expanded = new Set();
+const expanded     = new Set();
+const activeFilters = { week: new Set(), recipe: new Set(), ingredient: new Set(), allergen: new Set() };
 
 // ── LOAD DATA ─────────────────────────────────────────────────────────────────
 async function loadData() {
@@ -250,117 +308,33 @@ async function loadData() {
   applyFilters();
 }
 
-// ── CUSTOM SEARCHABLE SELECT ──────────────────────────────────────────────────
-class CustomSelect {
-  constructor(wrap, placeholder, onChange) {
-    this.wrap        = wrap;
-    this.placeholder = placeholder;
-    this.onChange    = onChange;
-    this.value       = '';
-    this.allOptions  = [];
-
-    wrap.innerHTML = `
-      <button class="cs-trigger" type="button">${placeholder}</button>
-      <div class="cs-panel">
-        <input class="cs-search" type="text" placeholder="Type to search…" autocomplete="off">
-        <div class="cs-list"></div>
-      </div>`;
-
-    this.trigger = wrap.querySelector('.cs-trigger');
-    this.panel   = wrap.querySelector('.cs-panel');
-    this.search  = wrap.querySelector('.cs-search');
-    this.list    = wrap.querySelector('.cs-list');
-
-    this.trigger.addEventListener('click', e => { e.stopPropagation(); this.toggle(); });
-    this.search.addEventListener('input', () => this.renderList());
-    document.addEventListener('click', e => { if (!wrap.contains(e.target)) this.close(); });
-  }
-
-  setOptions(opts) {
-    this.allOptions = opts;
-    this.renderList();
-  }
-
-  renderList() {
-    const q = this.search.value.toLowerCase();
-    const filtered = this.allOptions.filter(o => !q || o.label.toLowerCase().includes(q));
-    this.list.innerHTML = '';
-    filtered.forEach(o => {
-      const el = document.createElement('div');
-      el.className = 'cs-option' +
-        (o.value === this.value ? ' selected' : '') +
-        (!o.value ? ' is-placeholder' : '');
-      el.textContent = o.label;
-      el.addEventListener('click', () => this.select(o));
-      this.list.appendChild(el);
-    });
-  }
-
-  select(opt) {
-    this.value = opt.value;
-    this.trigger.textContent = opt.value ? opt.label : this.placeholder;
-    this.trigger.classList.toggle('has-value', !!opt.value);
-    this.close();
-    this.onChange();
-  }
-
-  reset() {
-    this.select(this.allOptions[0] || { value: '', label: this.placeholder });
-  }
-
-  toggle() {
-    if (this.wrap.classList.contains('open')) { this.close(); return; }
-    document.querySelectorAll('.cs-wrap.open').forEach(w => w.classList.remove('open'));
-    this.wrap.classList.add('open');
-    this.search.value = '';
-    this.renderList();
-    setTimeout(() => this.search.focus(), 0);
-  }
-
-  close() { this.wrap.classList.remove('open'); }
-}
-
-let csWeek, csRecipe, csIngredient, csAllergen;
-
-function initSelects() {
-  csWeek       = new CustomSelect(document.getElementById('cs-week'),       'All weeks',       applyFilters);
-  csRecipe     = new CustomSelect(document.getElementById('cs-recipe'),     'All recipes',     applyFilters);
-  csIngredient = new CustomSelect(document.getElementById('cs-ingredient'), 'All ingredients', applyFilters);
-  csAllergen   = new CustomSelect(document.getElementById('cs-allergen'),   'Any allergen',    applyFilters);
-
-  csAllergen.setOptions([
-    { value: '',         label: 'Any allergen'  },
-    { value: 'Gluten',   label: 'Gluten'        },
-    { value: 'Milk',     label: 'Dairy / Milk'  },
-    { value: 'Egg',      label: 'Eggs'          },
-    { value: 'Fish',     label: 'Fish'          },
-    { value: 'Soy',      label: 'Soy'           },
-    { value: 'Sesame',   label: 'Sesame'        },
-    { value: 'Peanut',   label: 'Peanut'        },
-    { value: 'Tree Nut', label: 'Tree Nuts'     },
-    { value: 'none',     label: 'No allergens'  },
-  ]);
-}
-
 // ── POPULATE FILTER DROPDOWNS ─────────────────────────────────────────────────
 function populateFilters() {
-  const weeks = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a, b) => parseDate(a) - parseDate(b));
-  csWeek.setOptions([
-    { value: '', label: 'All weeks' },
-    ...weeks.map(w => ({ value: w, label: 'Week of ' + w }))
-  ]);
+  const weeks = [...new Set(RAW.map(r => r.w).filter(Boolean))].sort((a, b) => parseDate(a) - parseDate(b));
+  buildPanel('week', weeks, w => fmtWeek(w));
 
-  const recipes = [...new Set(RAW.map(r => r.recipe).filter(Boolean))].sort();
-  csRecipe.setOptions([
-    { value: '', label: 'All recipes' },
-    ...recipes.map(r => ({ value: r, label: r }))
-  ]);
+  const recipes = [...new Set(RAW.map(r => r.re).filter(Boolean))].sort();
+  buildPanel('recipe', recipes, r => r);
 
-  const ingredients = [...new Set(RAW.map(r => r.ingredient).filter(Boolean))].sort();
-  csIngredient.setOptions([
-    { value: '', label: 'All ingredients' },
-    ...ingredients.map(i => ({ value: i, label: i }))
-  ]);
+  const ingredients = [...new Set(RAW.map(r => r.i).filter(Boolean))].sort();
+  buildPanel('ingredient', ingredients, i => i);
+
+  buildPanel('allergen', ['Gluten','Dairy / Milk','Eggs','Fish','Soy','Sesame','Peanut','Tree Nuts','No allergens'], a => a);
+}
+
+function fmtWeek(w) {
+  const [d, m, y] = w.split('/');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `Week of ${d} ${months[parseInt(m, 10) - 1]} ${y}`;
+}
+
+function buildPanel(filterId, options, labelFn) {
+  document.getElementById('fl-' + filterId).innerHTML = options.map(opt => {
+    return `<label class="filter-option">
+      <input type="checkbox" data-filter="${filterId}" data-value="${esc(opt)}" onchange="toggleOption('${filterId}',this.dataset.value,this.checked)">
+      <span class="filter-option-label">${esc(labelFn(opt))}</span>
+    </label>`;
+  }).join('');
 }
 
 function parseDate(str) {
@@ -373,59 +347,66 @@ function parseDate(str) {
 function consolidate(rows) {
   const map = new Map();
   rows.forEach(r => {
-    const key = r.ingredient.toLowerCase().trim();
+    const key = r.i.toLowerCase().trim();
     if (!key) return;
     if (!map.has(key)) {
       map.set(key, {
-        ingredient:     r.ingredient,
-        ingredientList: r.ingredientList,
-        origin:         r.origin,
-        contains:       [...r.contains],
-        mayContain:     [...r.mayContain],
-        recipes:        [r.recipe],
-        week:           r.week,
+        ingredient:     r.i,
+        ingredientList: r.il,
+        origin:         r.o,
+        contains:       [...r.c],
+        mayContain:     [...r.mc],
+        recipes:        [r.re],
+        week:           r.w,
       });
     } else {
       const e = map.get(key);
-      if (!e.recipes.includes(r.recipe)) e.recipes.push(r.recipe);
+      if (!e.recipes.includes(r.re)) e.recipes.push(r.re);
     }
   });
   return [...map.values()];
 }
 
+// ── ALLERGEN LABEL → FILTER KEY ──────────────────────────────────────────────
+const ALLERGEN_MAP = {
+  'gluten':       'gluten',
+  'dairy / milk': 'milk',
+  'eggs':         'egg',
+  'fish':         'fish',
+  'soy':          'soy',
+  'sesame':       'sesame',
+  'peanut':       'peanut',
+  'tree nuts':    'tree nut',
+};
+
 // ── FILTERS ───────────────────────────────────────────────────────────────────
 function applyFilters() {
-  const q        = document.getElementById('searchInput').value.toLowerCase().trim();
-  const week     = csWeek       ? csWeek.value       : '';
-  const recipe   = csRecipe     ? csRecipe.value     : '';
-  const ingredF  = csIngredient ? csIngredient.value : '';
-  const allergF  = csAllergen   ? csAllergen.value   : '';
+  const selWeeks     = activeFilters.week;
+  const selRecipes   = activeFilters.recipe;
+  const selIngreds   = activeFilters.ingredient;
+  const selAllergens = activeFilters.allergen;
 
   let rows = RAW;
-  if (week)    rows = rows.filter(r => r.week === week);
-  if (recipe)  rows = rows.filter(r => r.recipe === recipe);
-  if (ingredF) rows = rows.filter(r => r.ingredient === ingredF);
+  if (selWeeks.size   > 0) rows = rows.filter(r => selWeeks.has(r.w));
+  if (selRecipes.size > 0) rows = rows.filter(r => selRecipes.has(r.re));
+  if (selIngreds.size > 0) rows = rows.filter(r => selIngreds.has(r.i));
 
   let data = consolidate(rows);
 
-  data = data.filter(row => {
-    const mQ = !q ||
-      row.ingredient.toLowerCase().includes(q) ||
-      row.ingredientList.toLowerCase().includes(q) ||
-      row.contains.some(c => c.toLowerCase().includes(q)) ||
-      row.mayContain.some(c => c.toLowerCase().includes(q)) ||
-      row.recipes.some(r => r.toLowerCase().includes(q));
-
-    let mA = true;
-    if (allergF === 'none') {
-      mA = row.contains.length === 0 && row.mayContain.length === 0;
-    } else if (allergF) {
-      mA = row.contains.some(c => c.toLowerCase().includes(allergF.toLowerCase())) ||
-           row.mayContain.some(c => c.toLowerCase().includes(allergF.toLowerCase()));
-    }
-
-    return mQ && mA;
-  });
+  if (selAllergens.size > 0) {
+    data = data.filter(row => {
+      if (selAllergens.has('No allergens')) {
+        return row.contains.length === 0 && row.mayContain.length === 0;
+      }
+      return [...selAllergens].some(label => {
+        const key = ALLERGEN_MAP[label.toLowerCase()];
+        return key && (
+          row.contains.some(c => c.toLowerCase().includes(key)) ||
+          row.mayContain.some(c => c.toLowerCase().includes(key))
+        );
+      });
+    });
+  }
 
   data.sort((a, b) => {
     let av = a[sortKey], bv = b[sortKey];
@@ -446,11 +427,55 @@ function applyFilters() {
   render();
 }
 
-function clearAll() {
-  document.getElementById('searchInput').value = '';
-  [csWeek, csRecipe, csIngredient, csAllergen].forEach(cs => cs && cs.reset());
+// ── FILTER PANEL CONTROLS ─────────────────────────────────────────────────────
+function filterPanelOptions(filterId, query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll(`#fl-${filterId} .filter-option`).forEach(opt => {
+    const label = opt.querySelector('.filter-option-label').textContent.toLowerCase();
+    opt.style.display = (!q || label.includes(q)) ? '' : 'none';
+  });
+}
+
+function toggleFilterPanel(filterId) {
+  const panel  = document.getElementById('fp-' + filterId);
+  const btn    = document.getElementById('fb-' + filterId);
+  const isOpen = panel.classList.contains('open');
+  closeAllPanels();
+  if (!isOpen) { panel.classList.add('open'); btn.classList.add('open'); }
+}
+
+function closeAllPanels() {
+  document.querySelectorAll('.filter-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('open'));
+}
+
+function toggleOption(filterId, value, checked) {
+  if (checked) activeFilters[filterId].add(value);
+  else          activeFilters[filterId].delete(value);
+  updateFilterBtn(filterId);
   applyFilters();
 }
+
+function clearFilter(filterId) {
+  activeFilters[filterId].clear();
+  document.querySelectorAll(`#fl-${filterId} input[type="checkbox"]`).forEach(cb => cb.checked = false);
+  const search = document.querySelector(`#fp-${filterId} .panel-search`);
+  if (search) { search.value = ''; filterPanelOptions(filterId, ''); }
+  updateFilterBtn(filterId);
+  applyFilters();
+}
+
+function updateFilterBtn(filterId) {
+  const btn   = document.getElementById('fb-' + filterId);
+  const count = activeFilters[filterId].size;
+  const badge = btn.querySelector('.filter-count');
+  if (badge) badge.textContent = count;
+  btn.classList.toggle('has-selection', count > 0);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.filter-dropdown')) closeAllPanels();
+});
 
 // ── SORT ──────────────────────────────────────────────────────────────────────
 function sortBy(key) {
@@ -467,6 +492,13 @@ function sortBy(key) {
 function tags(arr) {
   if (!arr || arr.length === 0) return `<span class="dash">—</span>`;
   return arr.map(c => `<span class="tag">${esc(c)}</span>`).join('');
+}
+function originBadge(v) {
+  if (v === null || v === undefined) return `<span class="dash">—</span>`;
+  if (v === 0)   return `<span class="origin-badge origin-zero">0%</span>`;
+  if (v >= 80)   return `<span class="origin-badge origin-high">${v}%</span>`;
+  if (v >= 50)   return `<span class="origin-badge origin-mid">${v}%</span>`;
+                 return `<span class="origin-badge origin-low">${v}%</span>`;
 }
 function esc(s) {
   return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -492,6 +524,7 @@ function render() {
         <td class="td-list">${esc(row.ingredientList)}</td>
         <td>${tags(row.contains)}</td>
         <td>${tags(row.mayContain)}</td>
+        <td style="text-align:center">${originBadge(row.origin)}</td>
         <td style="text-align:center">
           <button class="recipes-btn ${isOpen ? 'open' : ''}" onclick="toggle(${idx})">
             ${row.recipes.length} recipe${row.recipes.length !== 1 ? 's' : ''}
@@ -501,7 +534,7 @@ function render() {
       </tr>`);
     if (isOpen) {
       row.recipes.forEach(r => {
-        rows.push(`<tr class="sub-row"><td colspan="5"><span class="sub-arrow">↳</span><span class="sub-label">${esc(r)}</span></td></tr>`);
+        rows.push(`<tr class="sub-row"><td colspan="6"><span class="sub-arrow">↳</span><span class="sub-label">${esc(r)}</span></td></tr>`);
       });
     }
   });
