@@ -145,38 +145,40 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 
 <div class="hero">
   <p class="hero-sub">Find every ingredient across our recipes — origin, allergens and more.</p>
-  <div class="filters-top">
+  <div style="max-width: 66%;">
+    <div class="filters-top">
 
-    <!-- Recipe — wide, type + dropdown -->
-    <div class="filter-wrap wide" id="recipeWrap">
-      <input class="filter-input" type="text" id="recipeInput" placeholder="Pick a recipe…" autocomplete="off"
-        oninput="onFilterType('recipe')" onfocus="openDropdown('recipe')" onblur="delayClose('recipe')">
-      <svg class="filter-chev" viewBox="0 0 9 5" fill="none">
-        <path d="M1 1l3.5 3L8 1" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <div class="filter-dropdown-list" id="recipeDrop"></div>
+      <!-- Ingredient — wide, type + dropdown -->
+      <div class="filter-wrap wide" id="ingredientWrap">
+        <input class="filter-input" type="text" id="ingredientInput" placeholder="Pick an ingredient…" autocomplete="off"
+          oninput="onFilterType('ingredient')" onfocus="openDropdown('ingredient')" onblur="delayClose('ingredient')">
+        <svg class="filter-chev" viewBox="0 0 9 5" fill="none">
+          <path d="M1 1l3.5 3L8 1" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="filter-dropdown-list" id="ingredientDrop"></div>
+      </div>
+
+      <!-- Recipe — wide, type + dropdown -->
+      <div class="filter-wrap wide" id="recipeWrap">
+        <input class="filter-input" type="text" id="recipeInput" placeholder="Pick a recipe…" autocomplete="off"
+          oninput="onFilterType('recipe')" onfocus="openDropdown('recipe')" onblur="delayClose('recipe')">
+        <svg class="filter-chev" viewBox="0 0 9 5" fill="none">
+          <path d="M1 1l3.5 3L8 1" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="filter-dropdown-list" id="recipeDrop"></div>
+      </div>
+
     </div>
+    <div class="filters-bottom">
 
-    <!-- Ingredient — wide, type + dropdown -->
-    <div class="filter-wrap wide" id="ingredientWrap">
-      <input class="filter-input" type="text" id="ingredientInput" placeholder="Pick an ingredient…" autocomplete="off"
-        oninput="onFilterType('ingredient')" onfocus="openDropdown('ingredient')" onblur="delayClose('ingredient')">
-      <svg class="filter-chev" viewBox="0 0 9 5" fill="none">
-        <path d="M1 1l3.5 3L8 1" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <div class="filter-dropdown-list" id="ingredientDrop"></div>
+      <!-- Week — narrow, dropdown -->
+      <div class="filter-wrap narrow">
+        <select class="filter-select" id="weekFilter" onchange="onWeekChange()">
+          <option value="">Pick a delivery week</option>
+        </select>
+      </div>
+
     </div>
-
-  </div>
-  <div class="filters-bottom">
-
-    <!-- Week — narrow, dropdown -->
-    <div class="filter-wrap narrow">
-      <select class="filter-select" id="weekFilter" onchange="onWeekChange()">
-        <option value="">Pick a delivery week</option>
-      </select>
-    </div>
-
   </div>
 </div>
 
