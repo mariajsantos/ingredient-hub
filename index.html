@@ -23,6 +23,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .hero-img-wrap img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; }
 
 .hero { background: var(--hero-bg); padding: 1.4rem 2rem 1.8rem; position: relative; overflow: hidden; }
+.hero-inner { max-width: 1200px; margin: 0 auto; }
 .hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); pointer-events: none; }
 .hero-sub { font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; margin-bottom: 1.1rem; }
 
@@ -48,6 +49,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 
 /* ── TOOLBAR ── */
 .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem 0.6rem; flex-wrap: wrap; gap: 8px; background: #F2EEE3; }
+.toolbar-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .result-count { font-size: 12.5px; color: var(--text-muted); }
 .result-count strong { color: var(--text-mid); font-weight: 500; }
 .active-filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
@@ -130,6 +132,12 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
   .cards-section { padding: 1rem 1rem 2rem; }
   .toolbar { padding: 0.7rem 1rem 0.5rem; }
   .filters-row { gap: 6px; }
+  .hero-inner { padding: 0; }
+  .filters-top { flex-direction: column; gap: 6px; }
+  .filters-bottom { flex-direction: column; gap: 6px; }
+  .filter-wrap.wide { width: 100%; flex: none; }
+  .filter-wrap.narrow { width: 100%; }
+  div[style*="max-width: 66%"] { max-width: 100% !important; }
 }
 </style>
 </head>
@@ -140,6 +148,7 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 </div>
 
 <div class="hero">
+  <div class="hero-inner">
   <p class="hero-sub">Find every ingredient across our recipes — origin, allergens and more.</p>
   <div style="max-width: 66%;">
     <div class="filters-top">
@@ -179,8 +188,10 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 </div>
 
 <div class="toolbar">
-  <div id="resultCount" class="result-count">Loading…</div>
-  <div class="active-filters" id="activeFilters"></div>
+  <div class="toolbar-inner">
+    <div id="resultCount" class="result-count">Loading…</div>
+    <div class="active-filters" id="activeFilters"></div>
+  </div>
 </div>
 
 <div class="cards-section">
