@@ -22,7 +22,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .hero-img-wrap { overflow: hidden; line-height: 0; }
 .hero-img-wrap img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; }
 
-.hero { background: var(--hero-bg); padding: 1.4rem 0 3rem; position: relative; overflow: hidden; }
+.hero { background: var(--hero-bg); padding: 1.4rem 0 4rem; position: relative; overflow: hidden; }
 .hero-inner { max-width: 1200px; margin: 0 auto; 0 1.5rem 4rem; }
 .hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); pointer-events: none; }
 .hero-sub { font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; margin-bottom: 1.1rem; }
@@ -46,6 +46,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .filter-select:focus { border-color: rgba(245,228,65,0.5); }
 .filter-select option { background: #3E3C30; color: #fff; font-style: normal; }
 .filter-select.has-value { color: rgba(255,255,255,0.88); font-style: normal; }
+.filter-select option:hover { background: var(--yellow);  color: var(--text);}
 
 /* ── TOOLBAR ── */
 .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem 0.6rem; flex-wrap: wrap; gap: 8px; background: #F2EEE3; }
