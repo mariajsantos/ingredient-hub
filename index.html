@@ -22,8 +22,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .hero-img-wrap { overflow: hidden; line-height: 0; }
 .hero-img-wrap img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; }
 
-.hero { background: var(--hero-bg); padding: 1.4rem 2rem 1.8rem; position: relative; overflow: hidden; }
-.hero-inner { max-width: 1200px; margin: 0 auto; }
+.hero { background: var(--hero-bg); padding: 1.4rem 0 3rem; position: relative; overflow: hidden; }
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 .hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); pointer-events: none; }
 .hero-sub { font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; margin-bottom: 1.1rem; }
 
@@ -37,9 +37,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .filter-input::placeholder { color: rgba(255,255,255,0.4); font-style: italic; }
 .filter-input:focus { border-color: rgba(245,228,65,0.5); background: rgba(255,255,255,0.12); }
 .filter-chev { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 9px; height: 5px; pointer-events: none; }
-.filter-dropdown-list { display: none; position: fixed; background: var(--white); border: 1px solid var(--border-mid); border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,0.18); z-index: 9999; max-height: 220px; overflow-y: auto; min-width: 200px; }
+.filter-dropdown-list { display: none; position: fixed; background: #3E3C30; border: 1px solid var(--border-mid); border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,0.18); z-index: 9999; max-height: 220px; overflow-y: auto; min-width: 200px; }
 .filter-dropdown-list.open { display: block; }
-.filter-option { padding: 8px 12px; font-size: 12.5px; color: var(--text); cursor: pointer; transition: background 0.1s; }
+.filter-option { padding: 8px 12px; font-size: 12.5px; color: rgba(255,255,255,0.88); cursor: pointer; transition: background 0.1s; }
 .filter-option:hover { background: var(--surface-2); }
 .filter-option.selected { background: #FDFADC; color: var(--text); font-weight: 500; }
 .filter-select { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 28px 9px 12px; font-size: 12.5px; color: rgba(255,255,255,0.4); font-style: italic; font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.45)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
@@ -49,7 +49,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 
 /* ── TOOLBAR ── */
 .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem 0.6rem; flex-wrap: wrap; gap: 8px; background: #F2EEE3; }
-.toolbar-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.toolbar-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 0 1.5rem; }
 .result-count { font-size: 12.5px; color: var(--text-muted); }
 .result-count strong { color: var(--text-mid); font-weight: 500; }
 .active-filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
@@ -60,8 +60,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 /* ══════════════════════════
    SCORECARD GRID (all screens)
 ══════════════════════════ */
-.cards-section { padding: 1.5rem 2rem 3rem; background: #F2EEE3; }
-.cards-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 1200px; margin: 0 auto; padding: 0; }
+.cards-section { padding: 1.5rem 0 3rem; background: #F2EEE3; }
+.cards-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
 .score-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
 
@@ -127,9 +127,9 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
-  .hero { padding: 1.1rem 1rem 1.4rem; }
+  .hero { padding: 1.1rem 0 1.4rem; }
   .hero-img-wrap img { max-height: 180px; }
-  .cards-section { padding: 1rem 1rem 2rem; }
+  .cards-section { padding: 1rem 0 2rem; }
   .toolbar { padding: 0.7rem 1rem 0.5rem; }
   .filters-row { gap: 6px; }
   .hero-inner { padding: 0; }
@@ -150,7 +150,7 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 <div class="hero">
   <div class="hero-inner">
   <p class="hero-sub">Find every ingredient across our recipes — origin, allergens and more.</p>
-  <div style="max-width: 66%;">
+  <div style="max-width: 820px; margin-left: 0;">
     <div class="filters-top">
 
       <!-- Ingredient — wide, type + dropdown -->
