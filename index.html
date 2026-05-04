@@ -178,11 +178,14 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
     <div class="filters-bottom">
 
       <!-- Week — narrow, dropdown -->
-      <div class="filter-wrap narrow">
-        <select class="filter-select" id="weekFilter" onchange="onWeekChange()">
-          <option value="">Pick a delivery week</option>
-        </select>
-      </div>
+    <div class="filter-wrap narrow" id="weekWrap">
+  <input class="filter-input" type="text" id="weekInput" placeholder="Pick a delivery week" autocomplete="off" readonly
+    onfocus="openDropdown('week')" onblur="delayClose('week')" style="cursor:pointer;">
+  <svg class="filter-chev" viewBox="0 0 9 5" fill="none">
+    <path d="M1 1l3.5 3L8 1" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  <div class="filter-dropdown-list" id="weekDrop"></div>
+</div>
 
     </div>
   </div>
