@@ -23,7 +23,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .hero-img-wrap img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; }
 
 .hero { background: var(--hero-bg); padding: 1.4rem 0 3rem; position: relative; overflow: hidden; }
-.hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.8rem; }
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
 .hero::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(245,228,65,0.05); pointer-events: none; }
 .hero-sub { font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; margin-bottom: 1.1rem; }
 
@@ -40,7 +40,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .filter-dropdown-list { display: none; position: fixed; background: #3E3C30; border: 1px solid var(--border-mid); border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,0.18); z-index: 9999; max-height: 220px; overflow-y: auto; min-width: 200px; }
 .filter-dropdown-list.open { display: block; }
 .filter-option { padding: 8px 12px; font-size: 12.5px; color: rgba(255,255,255,0.88); cursor: pointer; transition: background 0.1s; }
-.filter-option:hover { background: var(--yellow); color: var(--text); }
+.filter-option:hover { background: #FDFADC; color: var(--text); }
 .filter-option.selected { background: #FDFADC; color: var(--text); font-weight: 500; }
 .filter-select { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 28px 9px 12px; font-size: 12.5px; color: rgba(255,255,255,0.4); font-style: italic; font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.45)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
 .filter-select:focus { border-color: rgba(245,228,65,0.5); }
