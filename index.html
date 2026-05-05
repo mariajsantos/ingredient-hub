@@ -42,11 +42,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 .filter-option { padding: 8px 12px; font-size: 12.5px; color: rgba(255,255,255,0.88); cursor: pointer; transition: background 0.1s; }
 .filter-option:hover { background: #FDFADC; color: var(--text); }
 .filter-option.selected { background: #FDFADC; color: var(--text); font-weight: 500; }
-.filter-select { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 9px 28px 9px 12px; font-size: 12.5px; color: rgba(255,255,255,0.4); font-style: italic; font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath fill='rgba(255,255,255,0.45)' d='M4.5 5L0 0h9z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
-.filter-select:focus { border-color: rgba(245,228,65,0.5); }
-.filter-select option { background: #3E3C30; color: #fff; font-style: normal; }
-.filter-select.has-value { color: rgba(255,255,255,0.88); font-style: normal; }
 .filter-option:hover { background: var(--yellow); color: var(--text); }
+.clear-all-btn { background: none; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 9px 14px; font-size: 12.5px; color: rgba(255,255,255,0.55); font-family: 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap; transition: border-color 0.15s, color 0.15s; }
+.clear-all-btn:hover { border-color: rgba(255,255,255,0.55); color: rgba(255,255,255,0.88); }
 
 /* ── TOOLBAR ── */
 .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem 0.6rem; flex-wrap: wrap; gap: 8px; background: #F2EEE3; }
@@ -178,11 +176,17 @@ footer strong { color: rgba(255,255,255,0.7); font-weight: 500; }
     <div class="filters-bottom">
 
       <!-- Week — narrow, dropdown -->
-      <div class="filter-wrap narrow">
-        <select class="filter-select" id="weekFilter" onchange="onWeekChange()">
-          <option value="">Pick a delivery week</option>
-        </select>
+      <div class="filter-wrap narrow" id="weekWrap">
+        <input class="filter-input" type="text" id="weekInput" placeholder="Pick a delivery week…" autocomplete="off" readonly
+          onfocus="openDropdown('week')" onblur="delayClose('week')" style="cursor:pointer">
+        <svg class="filter-chev" viewBox="0 0 9 5" fill="none">
+          <path d="M1 1l3.5 3L8 1" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="filter-dropdown-list" id="weekDrop"></div>
       </div>
+
+      <!-- Clear all -->
+      <button class="clear-all-btn" onclick="clearAllFilters()">Clear all filters</button>
 
     </div>
   </div>
@@ -214,7 +218,7 @@ const SHEET_DATA = [{"recipe":"'Green Goddess' Falafel Bowls with Couscous Tabou
 let RAW = [], filtered = [];
 const cardExpanded = new Set();
 const activeFilters = { week: '', recipe: '', ingredient: '' };
-const dropdownOptions = { recipe: [], ingredient: [] };
+const dropdownOptions = { recipe: [], ingredient: [], week: [] };
 
 async function loadData() {
   if (API_URL) {
@@ -235,14 +239,8 @@ async function loadData() {
 
 // ── INIT FILTERS ──────────────────────────────────────────────────────────────
 function initFilters() {
-  // Week dropdown
-  const weeks = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a,b) => parseDate(a)-parseDate(b));
-  const wSel = document.getElementById('weekFilter');
-  weeks.forEach(w => {
-    const o = document.createElement('option');
-    o.value = w; o.textContent = fmtWeek(w);
-    wSel.appendChild(o);
-  });
+  // Week options
+  dropdownOptions.week = [...new Set(RAW.map(r => r.week).filter(Boolean))].sort((a,b) => parseDate(a)-parseDate(b));
   // Recipe options
   dropdownOptions.recipe = [...new Set(RAW.map(r => r.recipe).filter(Boolean))].sort();
   // Ingredient options
@@ -262,27 +260,6 @@ function parseDate(s) {
 }
 
 // ── DROPDOWN CONTROLS ─────────────────────────────────────────────────────────
-function onWeekChange() {
-  const sel = document.getElementById('weekFilter');
-  activeFilters.week = sel.value;
-  sel.classList.toggle('has-value', !!sel.value);
-  // Clear recipe/ingredient selections that no longer exist in this week
-  if (activeFilters.week) {
-    const validRecipes = new Set(RAW.filter(r => r.week === activeFilters.week).map(r => r.recipe));
-    const validIngreds = new Set(RAW.filter(r => r.week === activeFilters.week).map(r => r.ingredient));
-    if (activeFilters.recipe && !validRecipes.has(activeFilters.recipe)) {
-      activeFilters.recipe = '';
-      document.getElementById('recipeInput').value = '';
-    }
-    if (activeFilters.ingredient && !validIngreds.has(activeFilters.ingredient)) {
-      activeFilters.ingredient = '';
-      document.getElementById('ingredientInput').value = '';
-    }
-  }
-  applyFilters();
-  updateActiveBadges();
-}
-
 function onFilterType(key) {
   const q = document.getElementById(key+'Input').value.toLowerCase().trim();
   renderDropdown(key, q);
@@ -317,7 +294,15 @@ function renderDropdown(key, q) {
     baseOpts = baseOpts.filter(o => valid.has(o));
   }
 
-  const opts = baseOpts.filter(o => !q || o.toLowerCase().includes(q));
+  if (key === 'week') {
+    let rows = RAW;
+    if (activeFilters.ingredient) rows = rows.filter(r => r.ingredient === activeFilters.ingredient);
+    if (activeFilters.recipe)     rows = rows.filter(r => r.recipe === activeFilters.recipe);
+    const valid = new Set(rows.map(r => r.week));
+    baseOpts = baseOpts.filter(o => valid.has(o));
+  }
+
+  const opts = key === 'week' ? baseOpts : baseOpts.filter(o => !q || o.toLowerCase().includes(q));
   if (!opts.length) { drop.classList.remove('open'); return; }
 
   drop._opts = opts;
@@ -327,7 +312,7 @@ function renderDropdown(key, q) {
   drop.style.left  = rect.left + 'px';
   drop.style.width = rect.width + 'px';
   drop.innerHTML = opts.slice(0, 60).map((o, i) =>
-    `<div class="filter-option${activeFilters[key]===o?' selected':''}" data-key="${key}" data-idx="${i}" onmousedown="selectByIdx(this)">${esc(o)}</div>`
+    `<div class="filter-option${activeFilters[key]===o?' selected':''}" data-key="${key}" data-idx="${i}" onmousedown="selectByIdx(this)">${esc(key === 'week' ? fmtWeek(o) : o)}</div>`
   ).join('');
   drop.classList.add('open');
 }
@@ -339,8 +324,18 @@ function selectByIdx(el) {
   const val  = drop._opts[idx];
   if (!val) return;
   activeFilters[key] = val;
-  document.getElementById(key+'Input').value = val;
+  document.getElementById(key+'Input').value = key === 'week' ? fmtWeek(val) : val;
   drop.classList.remove('open');
+  if (key === 'week') {
+    const validRecipes = new Set(RAW.filter(r => r.week === val).map(r => r.recipe));
+    const validIngreds = new Set(RAW.filter(r => r.week === val).map(r => r.ingredient));
+    if (activeFilters.recipe && !validRecipes.has(activeFilters.recipe)) {
+      activeFilters.recipe = ''; document.getElementById('recipeInput').value = '';
+    }
+    if (activeFilters.ingredient && !validIngreds.has(activeFilters.ingredient)) {
+      activeFilters.ingredient = ''; document.getElementById('ingredientInput').value = '';
+    }
+  }
   // Refresh the other dropdown options after selection
   refreshDropdownOptions();
   applyFilters();
@@ -352,7 +347,7 @@ function delayClose(key) {
 }
 
 document.addEventListener('click', e => {
-  ['recipe','ingredient'].forEach(key => {
+  ['recipe','ingredient','week'].forEach(key => {
     if (!e.target.closest(`#${key}Wrap`)) document.getElementById(key+'Drop').classList.remove('open');
   });
 });
@@ -377,9 +372,18 @@ function refreshDropdownOptions() {
 
 function clearFilter(key) {
   activeFilters[key] = '';
-  if (key === 'week') { document.getElementById('weekFilter').value = ''; document.getElementById('weekFilter').classList.remove('has-value'); }
+  if (key === 'week') document.getElementById('weekInput').value = '';
   if (key === 'recipe') document.getElementById('recipeInput').value = '';
   if (key === 'ingredient') document.getElementById('ingredientInput').value = '';
+  applyFilters();
+  updateActiveBadges();
+}
+
+function clearAllFilters() {
+  activeFilters.week = ''; activeFilters.recipe = ''; activeFilters.ingredient = '';
+  document.getElementById('weekInput').value = '';
+  document.getElementById('recipeInput').value = '';
+  document.getElementById('ingredientInput').value = '';
   applyFilters();
   updateActiveBadges();
 }
@@ -428,8 +432,7 @@ function filterByRecipe(idx) {
   activeFilters.ingredient = '';
   activeFilters.week = '';
   document.getElementById('ingredientInput').value = '';
-  document.getElementById('weekFilter').value = '';
-  document.getElementById('weekFilter').classList.remove('has-value');
+  document.getElementById('weekInput').value = '';
   // Set recipe filter
   activeFilters.recipe = recipeName;
   document.getElementById('recipeInput').value = truncate(recipeName, 50);
