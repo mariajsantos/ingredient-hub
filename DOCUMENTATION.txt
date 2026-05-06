@@ -1,0 +1,232 @@
+================================================================================
+  INGREDIENT HUB — DOCUMENTATION
+  Marley Spoon | Last updated: May 2026
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  FILE STRUCTURE
+────────────────────────────────────────────────────────────────────────────────
+
+  ingredient-hub/
+  ├── index.html        AU region shell (data + config only)
+  ├── app.css           Shared styles — applies to ALL regions
+  ├── app.js            Shared logic  — applies to ALL regions
+  └── DOCUMENTATION.txt This file
+
+
+────────────────────────────────────────────────────────────────────────────────
+  app.css — SHARED STYLES
+────────────────────────────────────────────────────────────────────────────────
+
+  Contains all visual styles for the app. Shared across every region file.
+  Edit this once and every region gets the update automatically.
+
+  Sections inside app.css:
+  ┌──────────────────────┬──────────────────────────────────────────────────┐
+  │ :root variables      │ Brand colours (yellow, greens, reds, ambers…)    │
+  │ body / base          │ Font, background, min-height                     │
+  │ .hero-img-wrap       │ Banner image at the top                          │
+  │ .hero / .hero-inner  │ Dark green header section with filters           │
+  │ .filters-top/bottom  │ Layout of the filter row                         │
+  │ .filter-input        │ Shared style for all three filter fields         │
+  │ .filter-dropdown-list│ Floating dropdown panel                          │
+  │ .filter-option       │ Each row inside a dropdown                       │
+  │ .clear-all-btn       │ "Clear all filters" ghost button                 │
+  │ .toolbar             │ Result count + active badge bar                  │
+  │ .active-badge        │ Yellow pill shown when a filter is active        │
+  │ .score-card          │ Individual ingredient card                       │
+  │ .score-block         │ Allergen section (clean / contains / may contain)│
+  │ .recipe-list         │ Expandable recipe list inside a card             │
+  │ .empty               │ "No ingredients found" empty state               │
+  │ footer               │ Bottom bar                                       │
+  │ @media (max-width…)  │ Mobile responsive overrides                      │
+  └──────────────────────┴──────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────
+  app.js — SHARED LOGIC
+────────────────────────────────────────────────────────────────────────────────
+
+  Contains all JavaScript. Shared across every region file.
+  Reads REGION_LABEL, API_URL, and SHEET_DATA from the region shell.
+
+  Key variables (set by the region shell, read here):
+    API_URL        — URL to fetch live JSON data. Leave '' to use SHEET_DATA.
+    REGION_LABEL   — e.g. 'AU', 'DE', 'US'. Used in origin badges.
+    SHEET_DATA     — Fallback/embedded JSON array of ingredient rows.
+
+  Functions:
+  ┌─────────────────────────┬────────────────────────────────────────────────┐
+  │ loadData()              │ Entry point. Fetches API_URL or falls back to  │
+  │                         │ SHEET_DATA, then calls initFilters + render.   │
+  │ initFilters()           │ Builds the week / recipe / ingredient option   │
+  │                         │ lists from RAW data.                           │
+  │ openDropdown(key)       │ Opens the dropdown for 'week','recipe',        │
+  │                         │ or 'ingredient'.                               │
+  │ renderDropdown(key, q)  │ Renders filtered options in the dropdown.      │
+  │                         │ Cross-filters based on other active filters.   │
+  │ selectByIdx(el)         │ Handles option selection from a dropdown.      │
+  │ delayClose(key)         │ Closes a dropdown after a short delay          │
+  │                         │ (prevents flicker on blur).                   │
+  │ onFilterType(key)       │ Handles typing in ingredient/recipe inputs.    │
+  │ clearFilter(key)        │ Clears one filter by key.                      │
+  │ clearAllFilters()       │ Clears all three filters at once.              │
+  │ updateActiveBadges()    │ Refreshes the yellow pill badges in toolbar.   │
+  │ applyFilters()          │ Filters RAW data and calls render().           │
+  │ consolidate(rows)       │ Merges duplicate ingredient rows into one card │
+  │                         │ (one card per unique ingredient).              │
+  │ render()                │ Builds and injects all ingredient cards.       │
+  │ toggleCard(idx)         │ Expands/collapses recipe list on a card.       │
+  │ filterByRecipe(idx)     │ Clicking a recipe name inside a card sets the  │
+  │                         │ recipe filter and scrolls to top.              │
+  │ originBadge(v)          │ Returns HTML badge for origin % using          │
+  │                         │ REGION_LABEL (e.g. "85% AU Origin").           │
+  │ fmtWeek(w)              │ Formats "02/03/2026" → "Week of 02 Mar 2026". │
+  │ esc(s)                  │ HTML-escapes a string (XSS safety).            │
+  └─────────────────────────┴────────────────────────────────────────────────┘
+
+  Data format — each row in SHEET_DATA / API response:
+  {
+    "recipe":         "Recipe name",
+    "ingredient":     "Ingredient name",
+    "ingredientList": "Label text (what's printed on packaging)",
+    "contains":       ["Gluten", "Milk"],       // confirmed allergens
+    "mayContain":     ["Peanut", "Sesame"],     // cross-contamination risk
+    "origin":         85.0,                     // % local origin, 0 = imported, null = unknown
+    "brand":          "ms",
+    "week":           "02/03/2026"              // DD/MM/YYYY delivery week
+  }
+
+
+────────────────────────────────────────────────────────────────────────────────
+  index.html — REGION SHELL (example: AU)
+────────────────────────────────────────────────────────────────────────────────
+
+  This is the only file that differs per region.
+  It contains:
+    1. Page <title>
+    2. Hero banner image (base64 embedded)
+    3. The HTML layout (filters, cards grid, footer)  ← same for all regions
+    4. A <script> block with three region-specific variables:
+         const API_URL      = '';         // live data URL or leave empty
+         const REGION_LABEL = 'AU';       // shown in origin badges
+         const SHEET_DATA   = [...];      // embedded fallback data
+    5. <link> to app.css and <script src="app.js">
+
+  The footer text also references the region name — update it when duplicating.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  HOW TO ADD A NEW REGION — STEP BY STEP
+────────────────────────────────────────────────────────────────────────────────
+
+  STEP 1 — Duplicate index.html
+  ─────────────────────────────
+  Copy index.html and name it after the region code, e.g.:
+    de.html    (Germany)
+    gb.html    (UK)
+    us.html    (United States)
+    nz.html    (New Zealand)
+
+  Each file will be its own URL on GitHub Pages:
+    mariajsantos.github.io/ingredient-hub/          → AU
+    mariajsantos.github.io/ingredient-hub/de.html   → DE
+    mariajsantos.github.io/ingredient-hub/gb.html   → GB
+
+
+  STEP 2 — Update the <title>
+  ────────────────────────────
+  Find this line near the top:
+
+    <title>Ingredient Hub — Marley Spoon AU</title>
+
+  Change 'AU' to the new region code:
+
+    <title>Ingredient Hub — Marley Spoon DE</title>
+
+
+  STEP 3 — Update the config block
+  ──────────────────────────────────
+  Find this block near the bottom of the file (just before </body>):
+
+    <script>
+    const API_URL = '';
+    const REGION_LABEL = 'AU';
+    const SHEET_DATA = [...];
+    </script>
+
+  Change to:
+
+    <script>
+    const API_URL = 'https://your-api-url-for-DE.com/data';  // or leave ''
+    const REGION_LABEL = 'DE';
+    const SHEET_DATA = [... paste DE data here ...];
+    </script>
+
+  REGION_LABEL values to use:
+    Australia   → 'AU'
+    Germany     → 'DE'
+    United Kingdom → 'GB'
+    United States  → 'US'
+    New Zealand    → 'NZ'
+    Belgium        → 'BE'
+    (any string works — it appears in the origin badges on cards)
+
+
+  STEP 4 — Update the footer text  (optional)
+  ─────────────────────────────────────────────
+  Find this line:
+
+    <footer>© 2026 <strong>Marley Spoon</strong> Australia — ...</footer>
+
+  Change 'Australia' to the new region name.
+
+
+  STEP 5 — Swap the hero image  (optional)
+  ──────────────────────────────────────────
+  The banner image is embedded as a base64 string inside <div class="hero-img-wrap">.
+  To replace it:
+    1. Convert your new image to base64
+       (use an online tool or: base64 -i photo.jpg)
+    2. Replace the long data:image/jpeg;base64,... string with the new one.
+  If all regions share the same image, skip this step.
+
+
+  STEP 6 — Commit and push
+  ─────────────────────────
+  git add de.html
+  git commit -m "add DE region"
+  git push
+
+
+────────────────────────────────────────────────────────────────────────────────
+  MAKING CHANGES THAT APPLY TO ALL REGIONS
+────────────────────────────────────────────────────────────────────────────────
+
+  UI / style change   → edit app.css only
+  Logic / filter fix  → edit app.js only
+  Data update         → edit the SHEET_DATA in the specific region file
+  Title / footer      → edit the specific region file
+
+  Because every region file links to the same app.css and app.js,
+  a single edit there instantly applies everywhere.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  LIVE DATA vs EMBEDDED DATA
+────────────────────────────────────────────────────────────────────────────────
+
+  If API_URL is set, the app fetches fresh data on load.
+  If the fetch fails (or API_URL is empty), it falls back to SHEET_DATA.
+
+  To use live data:
+    const API_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
+
+  To use embedded data only:
+    const API_URL = '';
+
+
+================================================================================
+  END OF DOCUMENTATION
+================================================================================
